@@ -1,6 +1,7 @@
 import {
   GET_USER_LOGGED_PROFILE,
   GET_USER_LOGGED_TOKEN,
+  REGISTERED_USER,
   TOGGLE_AUTHORITY,
   TOGGLE_IS_LOGGED,
 } from "../actions"
@@ -8,6 +9,7 @@ import {
 const initialState = {
   isLogged: false,
   isAdmin: false,
+  isRegistered: false,
   user_bearer: "",
   user_info: {},
 }
@@ -23,6 +25,11 @@ const fetchUserReducer = (state = initialState, action) => {
       return {
         ...state,
         user_bearer: action.payload,
+      }
+    case REGISTERED_USER:
+      return {
+        ...state,
+        isRegistered: true,
       }
     case GET_USER_LOGGED_PROFILE:
       return {
