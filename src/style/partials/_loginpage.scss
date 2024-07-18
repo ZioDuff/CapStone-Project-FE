@@ -1,5 +1,11 @@
 
 
+body{
+  overflow-x: hidden;
+  overflow-y: hidden;
+  
+}
+
 .login-container {
     display: flex;
     height: 100vh;
@@ -12,9 +18,11 @@
   }
   
   .form-container {
-    width: 80%;
+    width: 50%;
     background-color: rgb(15, 14, 14);
+    opacity: 90%;
     border-radius: 20px;
+    min-height: 200px;
   }
 
 

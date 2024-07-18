@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css"
-import "./App.scss"
+import "./style/partials/_loginpage.scss"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import LoginPage from "./components/loginPage/LoginPage"
 

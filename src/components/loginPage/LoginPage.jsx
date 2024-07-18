@@ -1,6 +1,6 @@
 import { Button, Container, Form, Spinner } from "react-bootstrap"
 
-import "./LoginPage.scss"
+import "../../style/partials/_loginpage.scss"
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
@@ -52,7 +52,7 @@ const LoginPage = () => {
   }, [isLogged])
 
   return (
-    <Container fluid className="login-container ">
+    <Container fluid className="login-container bg-dark text-light">
       {!isLoading ? (
         <motion.div
           initial={{ scale: 0 }}
