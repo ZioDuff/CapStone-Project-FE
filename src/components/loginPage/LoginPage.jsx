@@ -52,7 +52,7 @@ const LoginPage = () => {
   }, [isLogged])
 
   return (
-    <Container fluid className="login-container bg-dark text-light">
+    <Container fluid className="login-container">
       {!isLoading ? (
         <motion.div
           initial={{ scale: 0 }}

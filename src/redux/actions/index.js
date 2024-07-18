@@ -17,6 +17,7 @@ export const loginUserAction = (loginObj, navigate) => {
         type: GET_USER_LOGGED_TOKEN,
         payload: response.data,
       })
+      localStorage.setItem("Bearer", response.data.token)
       console.log(response.data)
       navigate("/")
     } catch (err) {
