@@ -35,6 +35,7 @@ const fetchUserReducer = (state = initialState, action) => {
       return {
         ...state,
         user_info: action.payload,
+        isLogged: true,
       }
     case TOGGLE_AUTHORITY:
       return {

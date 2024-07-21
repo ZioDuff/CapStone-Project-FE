@@ -17,7 +17,7 @@ export const loginUserAction = (loginObj, navigate) => {
         type: GET_USER_LOGGED_TOKEN,
         payload: response.data,
       })
-      localStorage.setItem("Bearer", response.data.token)
+      localStorage.setItem("Bearer", JSON.stringify(response.data.accessToken))
       console.log(response.data)
       navigate("/")
     } catch (err) {
@@ -34,6 +34,22 @@ export const registerUserAction = (registerObj) => {
         type: REGISTERED_USER,
       })
       console.log(response.data)
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+}
+
+export const fetchUserInfoAction = (token) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(URL + "generics/me", {
+        headers: { Authorization: "Bearer " + token },
+      })
+      dispatch({
+        type: GET_USER_LOGGED_PROFILE,
+        payload: response.data,
+      })
     } catch (err) {
       console.log(err.message)
     }

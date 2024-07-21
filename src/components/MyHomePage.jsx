@@ -1,10 +1,4 @@
-import MyNavbar from "./MyNavbar"
-
 const MyHomePage = () => {
-  return (
-    <>
-      <MyNavbar />
-    </>
-  )
+  return <></>
 }
 export default MyHomePage

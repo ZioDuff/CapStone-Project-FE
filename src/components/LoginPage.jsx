@@ -1,10 +1,10 @@
 import { Button, Container, Form, Spinner } from "react-bootstrap"
 
-import "../../style/partials/_loginpage.scss"
+import "../style/partials/_loginpage.scss"
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { loginUserAction, registerUserAction } from "../../redux/actions"
+import { loginUserAction, registerUserAction } from "../redux/actions"
 import { motion } from "framer-motion"
 const LoginPage = () => {
   const dispatch = useDispatch()

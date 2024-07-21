@@ -1,8 +1,19 @@
+import { useEffect } from "react"
 import Container from "react-bootstrap/Container"
 import Nav from "react-bootstrap/Nav"
 import Navbar from "react-bootstrap/Navbar"
-import NavDropdown from "react-bootstrap/NavDropdown"
+import { useDispatch, useSelector } from "react-redux"
+import { fetchUserInfoAction } from "../redux/actions"
 const MyNavbar = () => {
+  const token = useSelector((state) => state.user.user_bearer.accessToken)
+  const isLogged = useSelector((state) => state.user.isLogged)
+  const loggedUser = useSelector((state) => state.user.user_info)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchUserInfoAction(token))
+    }
+  }, [dispatch, token])
   return (
     <>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -12,20 +23,11 @@ const MyNavbar = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link href="/">Home</Nav.Link>
-              <Nav.Link href="/login">Link</Nav.Link>
-              <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Another action
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">
-                  Something
-                </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">
-                  Separated link
-                </NavDropdown.Item>
-              </NavDropdown>
+              {!isLogged ? (
+                <Nav.Link href="/login">Login</Nav.Link>
+              ) : (
+                <img src={loggedUser.avatarURL} />
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>
