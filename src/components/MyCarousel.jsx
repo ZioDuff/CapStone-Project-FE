@@ -52,7 +52,7 @@ const MyCarousel = () => {
       swipeable
     >
       <img
-        src="https://images.unsplash.com/photo-1550133730-695473e544be?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
+        src="https://images.unsplash.com/photo-1509965478903-f26fb372b4e3"
         style={{
           display: "block",
           height: "100%",
@@ -62,7 +62,7 @@ const MyCarousel = () => {
         }}
       />
       <img
-        src="https://images.unsplash.com/photo-1604695840046-fe1fb42422ac?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        src="https://images.unsplash.com/photo-1604695840046-fe1fb42422ac"
         style={{
           display: "block",
           height: "100%",
@@ -71,7 +71,7 @@ const MyCarousel = () => {
         }}
       />
       <img
-        src="https://images.unsplash.com/photo-1550133730-695473e544be?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
+        src="https://plus.unsplash.com/premium_photo-1661714220704-711551e73799"
         style={{
           display: "block",
           height: "100%",
