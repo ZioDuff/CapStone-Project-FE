@@ -7,7 +7,10 @@ export const GET_USER_LOGGED_PROFILE = "GET_USER_LOGGED_PROFILE"
 export const GET_USER_LOGGED_TOKEN = "GET_USER_LOGGED_TOKEN"
 export const GET_CLIENT = "GET_CLIENT"
 
-const URL = "https://distant-roundworm-jacopo-de-maio-1e685948.koyeb.app/"
+export const FETCH_TATTOO_ARTISTS_REQUEST = "FETCH_TATTOO_ARTISTS_REQUEST"
+export const FETCH_TATTOO_ARTISTS_SUCCESS = "FETCH_TATTOO_ARTISTS_SUCCESS"
+export const FETCH_TATTOO_ARTISTS_FAILURE = "FETCH_TATTOO_ARTISTS_FAILURE"
+const URL = "https://imperial-chandra-jacopo-b7942b29.koyeb.app/"
 
 export const loginUserAction = (loginObj, navigate) => {
   return async (dispatch) => {
@@ -50,6 +53,38 @@ export const fetchUserInfoAction = (token) => {
         type: GET_USER_LOGGED_PROFILE,
         payload: response.data,
       })
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+}
+
+export const fetchRegisterTattooArtistAction = (token, registerObj) => {
+  return async () => {
+    try {
+      const response = await axios.post(
+        URL + "generics/enroll/tattooArtist",
+        registerObj,
+        {
+          headers: { Authorization: "Bearer " + token },
+        }
+      )
+      console.log(response)
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+}
+
+export const fetchTattooArtistsAction = () => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(URL + "tattooArtists")
+      dispatch({
+        type: FETCH_TATTOO_ARTISTS_SUCCESS,
+        payload: response.data.content,
+      })
+      console.log(response.data)
     } catch (err) {
       console.log(err.message)
     }

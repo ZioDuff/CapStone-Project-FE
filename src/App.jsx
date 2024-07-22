@@ -4,6 +4,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import LoginPage from "./components/LoginPage"
 import MyHomePage from "./components/MyHomePage"
 import MyNavbar from "./components/MyNavbar"
+import MyMainProfile from "./components/MyMainProfile"
+import TattooArtistsPage from "./components/TattooArtistsPage"
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<MyHomePage />} />
+          <Route path="/profilePage" element={<MyMainProfile />} />
+          <Route path="/tatuatori" element={<TattooArtistsPage />} />
         </Routes>
       </BrowserRouter>
     </>
