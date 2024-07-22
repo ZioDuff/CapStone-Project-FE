@@ -1,4 +1,5 @@
 import {
+  FETCH_SINGLE_TATTOO_ARTIST_SUCCESS,
   FETCH_TATTOO_ARTISTS_FAILURE,
   FETCH_TATTOO_ARTISTS_REQUEST,
   FETCH_TATTOO_ARTISTS_SUCCESS,
@@ -6,6 +7,7 @@ import {
 
 const initialState = {
   tattooArtists: [],
+  singleTattooArtist: {},
   loading: false,
   error: null,
 }
@@ -15,6 +17,11 @@ const tattooArtistReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
+      }
+    case FETCH_SINGLE_TATTOO_ARTIST_SUCCESS:
+      return {
+        ...state,
+        singleTattooArtist: action.payload,
       }
     case FETCH_TATTOO_ARTISTS_SUCCESS:
       return {

@@ -10,6 +10,9 @@ export const GET_CLIENT = "GET_CLIENT"
 export const FETCH_TATTOO_ARTISTS_REQUEST = "FETCH_TATTOO_ARTISTS_REQUEST"
 export const FETCH_TATTOO_ARTISTS_SUCCESS = "FETCH_TATTOO_ARTISTS_SUCCESS"
 export const FETCH_TATTOO_ARTISTS_FAILURE = "FETCH_TATTOO_ARTISTS_FAILURE"
+export const FETCH_SINGLE_TATTOO_ARTIST_SUCCESS =
+  "FETCH_SINGLE_TATTOO_ARTIST_SUCCESS"
+
 const URL = "https://imperial-chandra-jacopo-b7942b29.koyeb.app/"
 
 export const loginUserAction = (loginObj, navigate) => {
@@ -78,11 +81,27 @@ export const fetchRegisterTattooArtistAction = (token, registerObj) => {
 
 export const fetchTattooArtistsAction = () => {
   return async (dispatch) => {
+    dispatch({ type: FETCH_TATTOO_ARTISTS_REQUEST })
     try {
       const response = await axios.get(URL + "tattooArtists")
       dispatch({
         type: FETCH_TATTOO_ARTISTS_SUCCESS,
         payload: response.data.content,
+      })
+      console.log(response.data)
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+}
+
+export const fetchSingleTattooArtistAction = (id) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(URL + `tattooArtists/${id}`)
+      dispatch({
+        type: FETCH_SINGLE_TATTOO_ARTIST_SUCCESS,
+        payload: response.data,
       })
       console.log(response.data)
     } catch (err) {
