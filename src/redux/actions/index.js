@@ -5,7 +5,7 @@ export const TOGGLE_AUTHORITY = "TOGGLE_AUTHORITY"
 export const REGISTERED_USER = "REGISTERED_USER"
 export const GET_USER_LOGGED_PROFILE = "GET_USER_LOGGED_PROFILE"
 export const GET_USER_LOGGED_TOKEN = "GET_USER_LOGGED_TOKEN"
-export const GET_CLIENT = "GET_CLIENT"
+export const IS_ADMIN = "IS_ADMIN"
 
 export const FETCH_TATTOO_ARTISTS_REQUEST = "FETCH_TATTOO_ARTISTS_REQUEST"
 export const FETCH_TATTOO_ARTISTS_SUCCESS = "FETCH_TATTOO_ARTISTS_SUCCESS"
@@ -25,6 +25,7 @@ export const loginUserAction = (loginObj, navigate) => {
       })
       localStorage.setItem("Bearer", JSON.stringify(response.data.accessToken))
       console.log(response.data)
+      dispatch({ type: TOGGLE_IS_LOGGED })
       navigate("/")
     } catch (err) {
       console.log(err.message)
@@ -56,6 +57,9 @@ export const fetchUserInfoAction = (token) => {
         type: GET_USER_LOGGED_PROFILE,
         payload: response.data,
       })
+      if (response.data.role === "ADMIN") {
+        dispatch({ type: IS_ADMIN })
+      }
     } catch (err) {
       console.log(err.message)
     }

@@ -1,6 +1,7 @@
 import {
   GET_USER_LOGGED_PROFILE,
   GET_USER_LOGGED_TOKEN,
+  IS_ADMIN,
   REGISTERED_USER,
   TOGGLE_AUTHORITY,
   TOGGLE_IS_LOGGED,
@@ -35,12 +36,16 @@ const fetchUserReducer = (state = initialState, action) => {
       return {
         ...state,
         user_info: action.payload,
-        isLogged: true,
       }
     case TOGGLE_AUTHORITY:
       return {
         ...state,
         state: action.payload,
+      }
+    case IS_ADMIN:
+      return {
+        ...state,
+        isAdmin: true,
       }
     default:
       return state

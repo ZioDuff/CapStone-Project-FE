@@ -16,6 +16,7 @@ const LoginPage = () => {
   const [name, setName] = useState("")
   const [surname, setsurname] = useState("")
   const [username, setUsername] = useState("")
+  const [dateOfBirth, setDateOfBirth] = useState("")
   const [isLoading, setIsLoading] = useState(true)
 
   const handleLoginSubmit = (e) => {
@@ -37,6 +38,7 @@ const LoginPage = () => {
       password: password,
       name: name,
       surname: surname,
+      dateOfBirth: dateOfBirth,
     }
     dispatch(registerUserAction(registerObj))
     setEmail("")
@@ -52,7 +54,7 @@ const LoginPage = () => {
   }, [isLogged])
 
   return (
-    <Container fluid className="login-container">
+    <Container data-bs-theme="dark" fluid className="login-container">
       {!isLoading ? (
         <motion.div
           initial={{ scale: 0 }}
@@ -65,7 +67,7 @@ const LoginPage = () => {
           className="p-3 my-5 d-flex flex-column form-container"
         >
           {isLogged ? (
-            <Form onSubmit={handleLoginSubmit}>
+            <Form className="text-light" onSubmit={handleLoginSubmit}>
               <h1 className="text-center mb-4">Login</h1>
               <Form.Group className="mb-3" controlId="formGroupEmail">
                 <Form.Label>Inserisci la tua Email</Form.Label>
@@ -85,12 +87,12 @@ const LoginPage = () => {
                   placeholder="Password"
                 />
               </Form.Group>
-              <Button type="submit" className="mb-2">
+              <Button type="submit" className="mb-2 btn-submit">
                 Login
               </Button>
             </Form>
           ) : (
-            <Form onSubmit={handleRegisterSubmit}>
+            <Form className="text-light" onSubmit={handleRegisterSubmit}>
               <h1 className="text-center mb-4">Registrati</h1>
               <Form.Group className="mb-3" controlId="formGroupUserName">
                 <Form.Label>Scegli un Username</Form.Label>
@@ -137,12 +139,21 @@ const LoginPage = () => {
                   placeholder="Es. Rossi"
                 />
               </Form.Group>
-              <Button type="submit" className="mb-2">
+              <Form.Group className="mb-3" controlId="formGroupAge">
+                <Form.Label>Anno di nascita</Form.Label>
+                <Form.Control
+                  required
+                  onChange={(e) => setDateOfBirth(e.target.value)}
+                  type="date"
+                  placeholder="yyyy/mm/dd"
+                />
+              </Form.Group>
+              <Button type="submit" className="mb-2 btn-submit">
                 Registati
               </Button>
             </Form>
           )}
-          <div className="d-flex ">
+          <div className="d-flex text-light ">
             <p onClick={() => setIsLogged(!isLogged)}>
               {isLogged ? (
                 <>

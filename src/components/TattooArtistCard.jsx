@@ -1,31 +1,21 @@
-import { Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
+import "../style/partials/_tattooArtistCard.scss"
+import { Button, Card } from "react-bootstrap"
 
 const TattooArtistCard = ({ tattooArtist }) => {
   return (
     <>
-      <div className="d-flex  h-100 p-4">
-        <div className="me-5">
-          <img src={tattooArtist.avatarURL} alt={tattooArtist.username} />
-        </div>
-        <div>
-          <h2>{tattooArtist.username}</h2>
-          <p>
-            {tattooArtist.name} {tattooArtist.surname}
-          </p>
-
-          <p>{tattooArtist.description}</p>
-          <p>
-            contattami:{" "}
-            <span>
-              {tattooArtist.email} o {tattooArtist.phoneNumber}
-            </span>
-          </p>
-          <Link to={`/tatuatore/${tattooArtist.id}`}>
-            <Button>Vedi i miei lavori!</Button>
-          </Link>
-        </div>
-      </div>
+      <Card className="bg-dark text-white">
+        <Card.Img src={tattooArtist.avatarURL} alt={tattooArtist.username} />
+        <Card.ImgOverlay className="d-flex flex-column justify-content-end">
+          <Card.Title>{tattooArtist.username}</Card.Title>
+          <Card.Text>
+            <Button as={Link} to={`/tatuatore/${tattooArtist.id}`}>
+              Scopri di piu
+            </Button>
+          </Card.Text>
+        </Card.ImgOverlay>
+      </Card>
     </>
   )
 }

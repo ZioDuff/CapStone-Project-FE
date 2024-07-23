@@ -26,21 +26,29 @@ const TattooArtistsPage = () => {
   }
 
   return (
-    <Container fluid className="bg-secondary">
-      <h1 className="text-center">Conosci la nostra crew!</h1>
-      <Row>
-        <Col>
-          {tattooArtistsArray.length > 0 ? (
-            tattooArtistsArray.map((tattooArtist) => (
+    <Container fluid>
+      <h1 className="text-center mt-4 mb-4">Conosci la nostra crew!</h1>
+      <div className="text-light text-center mb-4">
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis
+          accusamus ullam libero doloremque, unde ex animi corrupti cupiditate.
+          Voluptas maiores alias numquam itaque dolor tempore quod dolorem,
+          totam obcaecati molestiae?
+        </p>
+      </div>
+      <Row className="justify-content-center">
+        {tattooArtistsArray.length > 0 ? (
+          tattooArtistsArray.map((tattooArtist, i) => (
+            <Col className="mb-3" xs={8} md={6} xl={4} xxl={2} key={i}>
               <TattooArtistCard
                 key={tattooArtist.id}
                 tattooArtist={tattooArtist}
               />
-            ))
-          ) : (
-            <h1>Sembra che al momento non ci siano tatuatori</h1>
-          )}
-        </Col>
+            </Col>
+          ))
+        ) : (
+          <h1>Sembra che al momento non ci siano tatuatori</h1>
+        )}
       </Row>
     </Container>
   )

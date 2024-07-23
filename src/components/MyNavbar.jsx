@@ -20,8 +20,15 @@ const MyNavbar = () => {
   }, [dispatch, token])
   return (
     <>
-      <Navbar expand="lg">
+      <Navbar expand="lg" data-bs-theme="dark">
         <Container>
+          <Navbar.Brand as={Link} to="/">
+            <img
+              style={{ width: "110px" }}
+              src={logoStudio}
+              alt="logoStudio-home"
+            />
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="w-100 justify-content-evenly align-items-center">
@@ -29,13 +36,7 @@ const MyNavbar = () => {
                 Crew
               </Nav.Link>
               <Nav.Link>Tattoos</Nav.Link>
-              <Nav.Link as={Link} to="/">
-                <img
-                  style={{ width: "110px" }}
-                  src={logoStudio}
-                  alt="logoStudio-home"
-                />
-              </Nav.Link>
+
               {!isLogged ? (
                 <Nav.Link as={Link} to="/login">
                   Login
