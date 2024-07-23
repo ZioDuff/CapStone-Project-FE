@@ -7,7 +7,7 @@ const MyCarousel = () => {
       arrows
       autoPlaySpeed={3000}
       centerMode={false}
-      className=""
+      className="carousel"
       dotListClass=""
       draggable
       focusOnSelect={false}
@@ -58,7 +58,6 @@ const MyCarousel = () => {
           height: "100%",
           margin: "auto",
           width: "100%",
-          aspectRatio: "16/9",
         }}
       />
       <img
