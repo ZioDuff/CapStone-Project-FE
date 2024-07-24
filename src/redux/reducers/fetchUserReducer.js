@@ -3,8 +3,10 @@ import {
   GET_USER_LOGGED_TOKEN,
   IS_ADMIN,
   REGISTERED_USER,
+  RESET_STATE,
   TOGGLE_AUTHORITY,
   TOGGLE_IS_LOGGED,
+  UPDATE_USER_AVATAR,
 } from "../actions"
 
 const initialState = {
@@ -46,6 +48,18 @@ const fetchUserReducer = (state = initialState, action) => {
       return {
         ...state,
         isAdmin: true,
+      }
+    case RESET_STATE:
+      return {
+        state: initialState,
+      }
+    case UPDATE_USER_AVATAR:
+      return {
+        ...state,
+        user_info: {
+          ...state.user_info,
+          avatarURL: action.payload,
+        },
       }
     default:
       return state

@@ -37,16 +37,24 @@ const MyNavbar = () => {
               </Nav.Link>
               <Nav.Link>Tattoos</Nav.Link>
 
+              <Nav.Link>Contact Us</Nav.Link>
               {!isLogged ? (
                 <Nav.Link as={Link} to="/login">
                   Login
                 </Nav.Link>
               ) : (
-                <Nav.Link as={Link} to="/profilePage">
-                  <img className="profile-image" src={loggedUser.avatarURL} />
+                <Nav.Link
+                  as={Link}
+                  to="/profilePage"
+                  className="d-flex align-items-center"
+                >
+                  <img
+                    className="profile-image me-2"
+                    src={loggedUser.avatarURL}
+                  />
+                  <span>{loggedUser.username}</span>
                 </Nav.Link>
               )}
-              <Nav.Link>Contact Us</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

@@ -1,8 +1,13 @@
-import { useEffect, useState } from "react"
+import "../style/partials/_myMainProfile.scss"
+import { useEffect, useRef, useState } from "react"
 import { Button, Col, Container, Modal, Row, Form } from "react-bootstrap"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchRegisterTattooArtistAction } from "../redux/actions"
-import { Link } from "react-router-dom"
+import {
+  fetchDeleteOwnAccountAction,
+  fetchRegisterTattooArtistAction,
+  fetchUploadAvatarAction,
+} from "../redux/actions"
+import { Link, useNavigate } from "react-router-dom"
 
 const MyMainProfile = () => {
   const isLogged = useSelector((state) => state.user.isLogged)
@@ -10,7 +15,9 @@ const MyMainProfile = () => {
   const token = useSelector((state) => state.user.user_bearer.accessToken)
 
   const [show, setShow] = useState(false)
-  const [showModalEmail, setShowModalEmail] = useState(false)
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false)
+  const [isEmailFormVisible, setIsEmailFormVisible] = useState(false)
+  const [isPasswordFormVisible, setIsPasswordFormVisible] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [name, setName] = useState("")
@@ -20,12 +27,14 @@ const MyMainProfile = () => {
   const [phoneNumber, setPhoneNumber] = useState(null)
   const [dateOfBirth, setDateOfBirth] = useState("")
 
+  const fileInput = useRef(null)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
 
-  const handleCloseModalEmail = () => setShowModalEmail(false)
-  const handleShowModalEmail = () => setShowModalEmail(true)
+  const handleCloseDeleteModal = () => setShowDeleteAccountModal(false)
+  const handleShowDeleteModal = () => setShowDeleteAccountModal(true)
 
   const handleRegisterSubmit = (e) => {
     e.preventDefault()
@@ -56,8 +65,28 @@ const MyMainProfile = () => {
     }
   }
 
+  const deleteAccount = () => {
+    if (loggedUser.id) {
+      dispatch(fetchDeleteOwnAccountAction(token, navigate))
+    }
+  }
+
   const handleUpdateUserInfo = (e) => {
     e.preventDefault()
+  }
+
+  const hanldeImageClick = () => {
+    fileInput.current.click()
+  }
+
+  const handleFileChange = (e) => {
+    if (token) {
+      const file = e.target.files[0]
+      const formData = new FormData()
+      formData.append("avatar", file)
+      dispatch(fetchUploadAvatarAction(token, formData))
+      console.log(file)
+    }
   }
   useEffect(() => {}, [])
   return (
@@ -73,9 +102,16 @@ const MyMainProfile = () => {
               <div className="d-flex align-items-center position-relative">
                 <div className="me-3">
                   <img
-                    className="rounded-circle"
+                    className="profile-avatar"
                     src={loggedUser.avatarURL}
+                    onClick={hanldeImageClick}
                     alt="sono io"
+                  />
+                  <Form.Control
+                    ref={fileInput}
+                    className="d-none"
+                    type="file"
+                    onChange={handleFileChange}
                   />
                 </div>
                 <div className="text-light">
@@ -267,25 +303,90 @@ const MyMainProfile = () => {
                 </Form>
               </Container>
               <Container className="text-light">
-                <p>Credenziali diaccesso</p>
+                <p>Credenziali di accesso</p>
                 <p>Controlla e modifica le tue credenziali d'accesso</p>
                 <Row>
                   <Col xs={12} className="my-2">
                     <p className="mb-0">Email di accesso:</p>
-                    <p>{loggedUser.email}</p>
-                    <Button onClick={handleShowModalEmail} className="mb-2">
-                      Cambia email
-                    </Button>
-                    <Modal show={showModalEmail} onHide={handleCloseModalEmail}>
-                      <Modal.Header closeButton>
-                        <Modal.Title>Cambia la Tua Email!</Modal.Title>
-                      </Modal.Header>
-                    </Modal>
+                    <p className="mb-0">{loggedUser.email}</p>
+                    {!isEmailFormVisible ? (
+                      <Button
+                        onClick={() =>
+                          setIsEmailFormVisible(!isEmailFormVisible)
+                        }
+                        className="mb-2 bg-transparent border-0 p-0 text-decoration-underline"
+                        Cambia
+                        email
+                      >
+                        Cambia la tua email
+                      </Button>
+                    ) : (
+                      <Form data-bs-theme="dark" className="mt-2">
+                        <Form.Group className="position-relative">
+                          <Form.Control defaultValue={loggedUser.email} />
+                          <span
+                            onClick={() => setIsEmailFormVisible(false)}
+                            className="position-absolute end-0 top-50 translate-middle"
+                          >
+                            ✖️
+                          </span>
+                        </Form.Group>
+                        <Button className="mt-2">invia</Button>
+                      </Form>
+                    )}
                   </Col>
-                  <Col>
+                  <Col xs={12}>
                     <p className="mb-0">Password di accesso:</p>
-                    <p>● ● ● ● ● ●</p>
-                    <Button>Cambia password</Button>
+                    <p className="mb-0">● ● ● ● ● ●</p>
+                    {!isPasswordFormVisible ? (
+                      <Button
+                        onClick={() =>
+                          setIsPasswordFormVisible(!isPasswordFormVisible)
+                        }
+                        className="mb-2 bg-transparent border-0 p-0 text-decoration-underline"
+                        Cambia
+                        email
+                      >
+                        Cambia la tua password
+                      </Button>
+                    ) : (
+                      <Form data-bs-theme="dark" className="mt-2">
+                        <Form.Group className="position-relative">
+                          <Form.Control defaultValue={loggedUser.password} />
+                          <span
+                            onClick={() => setIsPasswordFormVisible(false)}
+                            className="position-absolute end-0 top-50 translate-middle"
+                          >
+                            ✖️
+                          </span>
+                        </Form.Group>
+                        <Button className="mt-2">invia</Button>
+                      </Form>
+                    )}
+                  </Col>
+                  <Col xs={12}>
+                    <Button
+                      onClick={handleShowDeleteModal}
+                      className="btn-danger mt-4"
+                    >
+                      Elimina account
+                    </Button>
+                    <Modal
+                      show={showDeleteAccountModal}
+                      onHide={handleCloseDeleteModal}
+                    >
+                      <Modal.Header closeButton>
+                        <Modal.Title>Eliminazione Account</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        Attenzione premendo Elimina perderai l'account!
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button variant="danger" onClick={deleteAccount}>
+                          Elimina
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
                   </Col>
                 </Row>
               </Container>

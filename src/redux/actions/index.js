@@ -6,6 +6,8 @@ export const REGISTERED_USER = "REGISTERED_USER"
 export const GET_USER_LOGGED_PROFILE = "GET_USER_LOGGED_PROFILE"
 export const GET_USER_LOGGED_TOKEN = "GET_USER_LOGGED_TOKEN"
 export const IS_ADMIN = "IS_ADMIN"
+export const RESET_STATE = "RESET_STATE"
+export const UPDATE_USER_AVATAR = "UPDATE_USER_AVATAR"
 
 export const FETCH_TATTOO_ARTISTS_REQUEST = "FETCH_TATTOO_ARTISTS_REQUEST"
 export const FETCH_TATTOO_ARTISTS_SUCCESS = "FETCH_TATTOO_ARTISTS_SUCCESS"
@@ -111,5 +113,44 @@ export const fetchSingleTattooArtistAction = (id) => {
     } catch (err) {
       console.log(err.message)
     }
+  }
+}
+
+export const fetchDeleteOwnAccountAction = (token, navigate) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.delete(URL + `generics/me`, {
+        headers: { Authorization: "Bearer " + token },
+      })
+      alert("Account eliminato con successo")
+      dispatch({ type: RESET_STATE })
+      navigate("/")
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+}
+
+export const fetchUploadAvatarAction = (token, formData) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.patch(URL + `generics/me/avatar`, formData, {
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      console.log(response.data)
+      dispatch(updateUserAvatar(response.data))
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+}
+
+export const updateUserAvatar = (avatarURL) => {
+  return {
+    type: UPDATE_USER_AVATAR,
+    payload: avatarURL,
   }
 }
