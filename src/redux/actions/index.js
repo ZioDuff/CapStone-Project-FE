@@ -25,7 +25,7 @@ export const loginUserAction = (loginObj, navigate) => {
         type: GET_USER_LOGGED_TOKEN,
         payload: response.data,
       })
-      localStorage.setItem("Bearer", JSON.stringify(response.data.accessToken))
+      localStorage.setItem("Bearer ", JSON.stringify(response.data.accessToken))
       console.log(response.data)
       dispatch({ type: TOGGLE_IS_LOGGED })
       navigate("/")
@@ -152,5 +152,12 @@ export const updateUserAvatar = (avatarURL) => {
   return {
     type: UPDATE_USER_AVATAR,
     payload: avatarURL,
+  }
+}
+
+export const logOutAction = () => {
+  localStorage.removeItem("Bearer ")
+  return async (dispatch) => {
+    dispatch({ type: RESET_STATE })
   }
 }

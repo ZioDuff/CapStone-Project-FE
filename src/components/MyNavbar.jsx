@@ -1,18 +1,29 @@
 import "../style/partials/_myNavbar.scss"
 import "../style/App.scss"
 import { useEffect } from "react"
-import Container from "react-bootstrap/Container"
-import Nav from "react-bootstrap/Nav"
-import Navbar from "react-bootstrap/Navbar"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchUserInfoAction } from "../redux/actions"
+import { fetchUserInfoAction, logOutAction } from "../redux/actions"
 import { Link } from "react-router-dom"
 import logoStudio from "../assets/draw_svg20240619-7-124scw8.svg-removebg.png"
+import {
+  Button,
+  ButtonGroup,
+  Navbar,
+  Nav,
+  Container,
+  Dropdown,
+} from "react-bootstrap"
+
 const MyNavbar = () => {
-  const token = useSelector((state) => state.user.user_bearer.accessToken)
+  const token = useSelector((state) => state.user.user_bearer?.accessToken)
   const isLogged = useSelector((state) => state.user.isLogged)
   const loggedUser = useSelector((state) => state.user.user_info)
   const dispatch = useDispatch()
+
+  const handleLogOut = () => {
+    dispatch(logOutAction())
+  }
+
   useEffect(() => {
     if (token) {
       dispatch(fetchUserInfoAction(token))
@@ -43,17 +54,38 @@ const MyNavbar = () => {
                   Login
                 </Nav.Link>
               ) : (
-                <Nav.Link
-                  as={Link}
-                  to="/profilePage"
-                  className="d-flex align-items-center"
-                >
-                  <img
-                    className="profile-image me-2"
-                    src={loggedUser.avatarURL}
-                  />
-                  <span>{loggedUser.username}</span>
-                </Nav.Link>
+                <div className="d-flex align-items-center">
+                  <Nav.Link as={Link} to="/profilePage">
+                    <img
+                      className="profile-image me-2"
+                      src={loggedUser?.avatarURL}
+                    />
+                  </Nav.Link>
+                  <Dropdown as={ButtonGroup}>
+                    <Nav.Link
+                      as={Link}
+                      to="/profilePage"
+                      className="bg-transparent border-0"
+                    >
+                      {loggedUser?.username}
+                    </Nav.Link>
+
+                    <Dropdown.Toggle
+                      split
+                      className="bg-transparent border-0"
+                      id="dropdown-split-basic"
+                    />
+
+                    <Dropdown.Menu className="position-absolute">
+                      <Dropdown.Item as={Link} to="/profilePage">
+                        Impostazioni
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={handleLogOut}>
+                        Log out
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
               )}
             </Nav>
           </Navbar.Collapse>
