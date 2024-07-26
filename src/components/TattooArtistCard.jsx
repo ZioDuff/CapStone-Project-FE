@@ -6,7 +6,15 @@ const TattooArtistCard = ({ tattooArtist }) => {
   return (
     <>
       <Card className="bg-dark text-white">
-        <Card.Img src={tattooArtist.avatarURL} alt={tattooArtist.username} />
+        <Card.Img
+          style={{
+            width: "100%",
+            aspectRatio: "4/3",
+            objectFit: "cover",
+          }}
+          src={tattooArtist.avatarURL}
+          alt={tattooArtist.username}
+        />
         <Card.ImgOverlay className="d-flex flex-column justify-content-end">
           <Card.Title>{tattooArtist.username}</Card.Title>
           <Card.Text>

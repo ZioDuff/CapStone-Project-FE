@@ -5,14 +5,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { fetchUserInfoAction, logOutAction } from "../redux/actions"
 import { Link } from "react-router-dom"
 import logoStudio from "../assets/draw_svg20240619-7-124scw8.svg-removebg.png"
-import {
-  Button,
-  ButtonGroup,
-  Navbar,
-  Nav,
-  Container,
-  Dropdown,
-} from "react-bootstrap"
+import { ButtonGroup, Navbar, Nav, Container, Dropdown } from "react-bootstrap"
 
 const MyNavbar = () => {
   const token = useSelector((state) => state.user.user_bearer?.accessToken)

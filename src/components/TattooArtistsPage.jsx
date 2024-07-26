@@ -39,7 +39,7 @@ const TattooArtistsPage = () => {
       <Row className="justify-content-center">
         {tattooArtistsArray.length > 0 ? (
           tattooArtistsArray.map((tattooArtist, i) => (
-            <Col className="mb-3" xs={8} md={6} xl={4} xxl={2} key={i}>
+            <Col className="mb-3" xs={8} md={5} xl={4} xxl={3} key={i}>
               <TattooArtistCard
                 key={tattooArtist.id}
                 tattooArtist={tattooArtist}
