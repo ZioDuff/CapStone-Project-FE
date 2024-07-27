@@ -15,6 +15,10 @@ export const FETCH_TATTOO_ARTISTS_FAILURE = "FETCH_TATTOO_ARTISTS_FAILURE"
 export const FETCH_SINGLE_TATTOO_ARTIST_SUCCESS =
   "FETCH_SINGLE_TATTOO_ARTIST_SUCCESS"
 
+export const UPLOAD_TATTOO_REQUEST = "UPLOAD_TATTOO_REQUEST"
+export const UPLOAD_TATTOO_SUCCESS = "UPLOAD_TATTOO_SUCCESS"
+export const UPLOAD_TATTOO_FAILURE = "UPLOAD_TATTOO_FAILURE"
+
 const URL = "https://imperial-chandra-jacopo-b7942b29.koyeb.app/"
 
 export const loginUserAction = (loginObj, navigate) => {
@@ -159,5 +163,28 @@ export const logOutAction = () => {
   localStorage.removeItem("Bearer ")
   return async (dispatch) => {
     dispatch({ type: RESET_STATE })
+  }
+}
+
+export const fetchUploadTattooAction = (token, formData) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.post(
+        URL + "generics/me/newTattoo",
+        formData,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
+      dispatch({
+        type: UPLOAD_TATTOO_SUCCESS,
+        payload: response.data,
+      })
+    } catch (err) {
+      console.log(err.message)
+    }
   }
 }

@@ -12,13 +12,13 @@ const TattooArtistCard = ({ tattooArtist }) => {
             aspectRatio: "4/3",
             objectFit: "cover",
           }}
-          src={tattooArtist.avatarURL}
-          alt={tattooArtist.username}
+          src={tattooArtist?.avatarURL}
+          alt={tattooArtist?.username}
         />
         <Card.ImgOverlay className="d-flex flex-column justify-content-end">
-          <Card.Title>{tattooArtist.username}</Card.Title>
+          <Card.Title>{tattooArtist?.username}</Card.Title>
           <Card.Text>
-            <Button as={Link} to={`/tatuatore/${tattooArtist.id}`}>
+            <Button as={Link} to={`/tatuatore/${tattooArtist?.id}`}>
               Scopri di piu
             </Button>
           </Card.Text>

@@ -6,6 +6,7 @@ import {
   fetchDeleteOwnAccountAction,
   fetchRegisterTattooArtistAction,
   fetchUploadAvatarAction,
+  fetchUploadTattooAction,
 } from "../redux/actions"
 import { Link, useNavigate } from "react-router-dom"
 
@@ -16,8 +17,10 @@ const MyMainProfile = () => {
 
   const [show, setShow] = useState(false)
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false)
+  const [isUpdateInfoFormVisible, setIsUpdateInfoFormVisible] = useState(false)
   const [isEmailFormVisible, setIsEmailFormVisible] = useState(false)
   const [isPasswordFormVisible, setIsPasswordFormVisible] = useState(false)
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [name, setName] = useState("")
@@ -27,6 +30,10 @@ const MyMainProfile = () => {
   const [phoneNumber, setPhoneNumber] = useState(null)
   const [dateOfBirth, setDateOfBirth] = useState("")
 
+  const [tattooName, setTattooName] = useState("")
+  const [tattooDescription, setTattooDescription] = useState("")
+  const [tattooFile, setTattooFile] = useState(null)
+
   const fileInput = useRef(null)
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -35,6 +42,19 @@ const MyMainProfile = () => {
 
   const handleCloseDeleteModal = () => setShowDeleteAccountModal(false)
   const handleShowDeleteModal = () => setShowDeleteAccountModal(true)
+
+  const handleTattooFormSubmit = (e) => {
+    e.preventDefault()
+    if (token) {
+      const formData = new FormData()
+      formData.append("newTattoo", tattooFile)
+      formData.append(
+        "payload",
+        JSON.stringify({ name: tattooName, description: tattooDescription })
+      )
+      dispatch(fetchUploadTattooAction(token, formData))
+    }
+  }
 
   const handleRegisterSubmit = (e) => {
     e.preventDefault()
@@ -232,79 +252,132 @@ const MyMainProfile = () => {
                   </Modal>
                 </div>
               </div>
-              <Container
-                className="my-5 border-top border-bottom text-light "
-                data-bs-theme="dark"
-              >
-                <p className="my-4">Info personali</p>
-                <p className="my-4">Aggiorna le tue info personali</p>
-                <Form onSubmit={handleUpdateUserInfo}>
-                  <Row>
-                    <Col md={6}>
-                      <Form.Group>
-                        <Form.Label>Nome</Form.Label>
-                        <Form.Control
-                          defaultValue={loggedUser.name}
-                          type="text"
-                          required
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group>
-                        <Form.Label>Cognome</Form.Label>
-                        <Form.Control
-                          value={loggedUser.surname}
-                          type="text"
-                          required
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group>
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control
-                          value={loggedUser.username}
-                          type="text"
-                          required
-                        />
-                      </Form.Group>
-                    </Col>
-                    {loggedUser.role === "TATTOOARTIST" && (
-                      <>
-                        <Col md={6}>
-                          <Form.Group>
-                            <Form.Label>Numero di telefono</Form.Label>
-                            <Form.Control
-                              defaultValue={loggedUser.phoneNumber}
-                              type="text"
-                              required
-                            />
-                          </Form.Group>
-                        </Col>
-                        <Col md={12}>
-                          <Form.Group>
-                            <Form.Label>Descrizione</Form.Label>
-                            <Form.Control
-                              defaultValue={loggedUser.description}
-                              as="textarea"
-                              required
-                            />
-                          </Form.Group>
-                        </Col>
-                      </>
-                    )}
-                    <Col>
-                      <Button type="submit" className="my-4">
-                        Invia Cambiamenti
-                      </Button>
-                    </Col>
-                  </Row>
-                </Form>
-              </Container>
-              <Container className="text-light">
-                <p>Credenziali di accesso</p>
-                <p>Controlla e modifica le tue credenziali d'accesso</p>
+              {loggedUser.role === "TATTOOARTIST" && (
+                <Container
+                  data-bs-theme="dark"
+                  className="my-5 border-top border-bottom text-light  "
+                >
+                  <p>Aggiungi un nuovo tatuaggio</p>
+                  <Form
+                    onSubmit={handleTattooFormSubmit}
+                    data-bs-theme="dark"
+                    className="mt-2"
+                  >
+                    <Form.Group>
+                      <Form.Label>Nome del tatuaggio</Form.Label>
+                      <Form.Control
+                        onChange={(e) => setTattooName(e.target.value)}
+                        type="text"
+                        placeholder="Es. dragone supremo"
+                      />
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Label>Descrizione del tatuaggio</Form.Label>
+                      <Form.Control
+                        onChange={(e) => setTattooDescription(e.target.value)}
+                        type="text"
+                        placeholder="Es. Ho svolto questo lavoro usando ecc..."
+                      />
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Label>URL del Tattoo</Form.Label>
+                      <Form.Control
+                        type="file"
+                        onChange={(e) => setTattooFile(e.target.files[0])}
+                      />
+                    </Form.Group>
+                    <Button type="submit" className="mt-2">
+                      invia
+                    </Button>
+                  </Form>
+                </Container>
+              )}
+              <Container data-bs-theme="dark" className="text-light">
+                {!isUpdateInfoFormVisible ? (
+                  <Button
+                    onClick={() =>
+                      setIsUpdateInfoFormVisible(!isUpdateInfoFormVisible)
+                    }
+                    className="p-0 my-4 bg-transparent border-0 text-decoration-underline "
+                  >
+                    Controlla e modfica le tue info personali
+                  </Button>
+                ) : (
+                  <Form onSubmit={handleUpdateUserInfo}>
+                    <Row>
+                      <Col md={6}>
+                        <Form.Group>
+                          <Form.Label>Nome</Form.Label>
+                          <Form.Control
+                            defaultValue={loggedUser.name}
+                            type="text"
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col md={6}>
+                        <Form.Group>
+                          <Form.Label>Cognome</Form.Label>
+                          <Form.Control
+                            value={loggedUser.surname}
+                            type="text"
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col md={6}>
+                        <Form.Group>
+                          <Form.Label>Username</Form.Label>
+                          <Form.Control
+                            value={loggedUser.username}
+                            type="text"
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                      {loggedUser.role === "TATTOOARTIST" && (
+                        <>
+                          <Col md={6}>
+                            <Form.Group>
+                              <Form.Label>Numero di telefono</Form.Label>
+                              <Form.Control
+                                defaultValue={loggedUser.phoneNumber}
+                                type="text"
+                                required
+                              />
+                            </Form.Group>
+                          </Col>
+                          <Col md={12}>
+                            <Form.Group>
+                              <Form.Label>Descrizione</Form.Label>
+                              <Form.Control
+                                defaultValue={loggedUser.description}
+                                as="textarea"
+                                required
+                              />
+                            </Form.Group>
+                          </Col>
+                        </>
+                      )}
+                      <Col>
+                        <Button type="submit" className="my-4 me-4">
+                          Invia Cambiamenti
+                        </Button>
+                        <Button
+                          variant="danger"
+                          onClick={() =>
+                            setIsUpdateInfoFormVisible(!isUpdateInfoFormVisible)
+                          }
+                          className="my-4"
+                        >
+                          annulla
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form>
+                )}
+
+                <p>Modifica le tue credenziali d'accesso</p>
                 <Row>
                   <Col xs={12} className="my-2">
                     <p className="mb-0">Email di accesso:</p>

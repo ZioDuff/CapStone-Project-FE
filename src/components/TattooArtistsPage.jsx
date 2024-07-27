@@ -6,15 +6,13 @@ import TattooArtistCard from "./TattooArtistCard"
 
 const TattooArtistsPage = () => {
   const tattooArtistsArray = useSelector(
-    (state) => state.tattooArtist.tattooArtists
+    (state) => state.tattooArtist?.tattooArtists
   )
   const loading = useSelector((state) => state.tattooArtist.loading)
 
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(fetchTattooArtistsAction())
-
-    console.log(tattooArtistsArray)
   }, [])
 
   if (loading) {
@@ -37,11 +35,11 @@ const TattooArtistsPage = () => {
         </p>
       </div>
       <Row className="justify-content-center">
-        {tattooArtistsArray.length > 0 ? (
+        {tattooArtistsArray?.length > 0 ? (
           tattooArtistsArray.map((tattooArtist, i) => (
             <Col className="mb-3" xs={8} md={5} xl={4} xxl={3} key={i}>
               <TattooArtistCard
-                key={tattooArtist.id}
+                key={tattooArtist?.id}
                 tattooArtist={tattooArtist}
               />
             </Col>
