@@ -21,6 +21,7 @@ const tattooArtistReducer = (state = initialState, action) => {
     case FETCH_SINGLE_TATTOO_ARTIST_SUCCESS:
       return {
         ...state,
+        loading: false,
         singleTattooArtist: action.payload,
       }
     case FETCH_TATTOO_ARTISTS_SUCCESS:

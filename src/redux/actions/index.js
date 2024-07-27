@@ -107,6 +107,7 @@ export const fetchTattooArtistsAction = () => {
 
 export const fetchSingleTattooArtistAction = (id) => {
   return async (dispatch) => {
+    dispatch({ type: FETCH_TATTOO_ARTISTS_REQUEST })
     try {
       const response = await axios.get(URL + `tattooArtists/${id}`)
       dispatch({

@@ -3,24 +3,30 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { fetchSingleTattooArtistAction } from "../redux/actions"
-import { Col, Container, Row } from "react-bootstrap"
+import { Col, Container, Row, Spinner } from "react-bootstrap"
 
 const SingleTattooArtistPage = () => {
   const singleTattooArtist = useSelector(
     (state) => state.tattooArtist.singleTattooArtist
   )
   const loading = useSelector((state) => state.tattooArtist.loading)
+  const tattoos = useSelector(
+    (state) => state.tattooArtist.singleTattooArtist.tattoos
+  )
   const { id } = useParams()
   const dispatch = useDispatch()
   useEffect(() => {
     if (id) {
-      console.log(id)
       dispatch(fetchSingleTattooArtistAction(id))
     }
   }, [dispatch, id])
 
   if (loading) {
-    return <div>caricamento....</div>
+    return (
+      <Spinner animation="border" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </Spinner>
+    )
   }
 
   return (
@@ -53,14 +59,23 @@ const SingleTattooArtistPage = () => {
                     {singleTattooArtist?.description}
                   </div>
                 </div>
-                {singleTattooArtist.tattoos > 0 ? (
-                  <div className="mt-5">
-                    {singleTattooArtist?.tattoos.map((tattoo, i) => (
-                      <div key={i}>
-                        <img src={tattoo.tattooURL} alt={tattoo.name} />
-                      </div>
-                    ))}
-                  </div>
+                {tattoos.length > 0 ? (
+                  <Container className="mt-5">
+                    <Row>
+                      <h2 className="text-light">
+                        questi sono alucni dei miei lavori
+                      </h2>
+                      {tattoos.map((tattoo, i) => (
+                        <Col xs={12} className="my-4" key={i}>
+                          <img
+                            className="w-100"
+                            src={tattoo.tattoURL}
+                            alt={tattoo.name}
+                          />
+                        </Col>
+                      ))}
+                    </Row>
+                  </Container>
                 ) : (
                   <div className="mt-5">
                     <h2 className="text-light">
