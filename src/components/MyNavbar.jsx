@@ -36,12 +36,14 @@ const MyNavbar = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="w-100 justify-content-evenly align-items-center">
+              <Nav.Link as={Link} to="/">
+                Home
+              </Nav.Link>
               <Nav.Link as={Link} to="/tatuatori">
                 Crew
               </Nav.Link>
-              <Nav.Link>Tattoos</Nav.Link>
 
-              <Nav.Link>Contact Us</Nav.Link>
+              <Nav.Link>Prenotazioni</Nav.Link>
               {!isLogged ? (
                 <Nav.Link as={Link} to="/login">
                   Login

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { useEffect } from "react"
 import { fetchTattoosAction } from "../redux/actions"
+import TattooCard from "./TattooCard"
 
 const MyHomePage = () => {
   const isLogged = useSelector((state) => state.user.isLogged)
@@ -55,18 +56,16 @@ const MyHomePage = () => {
           <Container className="text-light my-3">
             {tattoos?.length > 0 ? (
               <>
-                <h2>
+                <h2 className="mb-4 text-center">
                   Questi sono solo alcuni dei lavori fatti dai nostri Artisti
                 </h2>
-                <Row>
+                <Row className="justify-content-center">
                   {tattoos.map((tattoo, i) => (
-                    <Col xs={12} md={6} lg={4} xl={3} key={i} className="mb-3">
-                      <img
-                        className="w-100"
-                        src={tattoo.tattoURL}
-                        alt={tattoo.name}
-                      />
-                    </Col>
+                    <>
+                      <Col xs={8} md={6} lg={4} xl={4} key={i} className="mb-3">
+                        <TattooCard tattoo={tattoo} />
+                      </Col>
+                    </>
                   ))}
                 </Row>
               </>

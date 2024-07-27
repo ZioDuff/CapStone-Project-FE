@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { fetchSingleTattooArtistAction } from "../redux/actions"
 import { Col, Container, Row, Spinner } from "react-bootstrap"
-
+import TattooCard from "./TattooCard"
 const SingleTattooArtistPage = () => {
   const singleTattooArtist = useSelector(
     (state) => state.tattooArtist.singleTattooArtist
@@ -43,7 +43,7 @@ const SingleTattooArtistPage = () => {
                     <img
                       className="artist-avatar"
                       src={singleTattooArtist?.avatarURL}
-                      alt=""
+                      alt={singleTattooArtist?.username}
                     />
                   </div>
                   <div className="text-light">
@@ -66,13 +66,20 @@ const SingleTattooArtistPage = () => {
                         questi sono alucni dei miei lavori
                       </h2>
                       {tattoos.map((tattoo, i) => (
-                        <Col xs={12} className="my-4" key={i}>
-                          <img
-                            className="w-100"
-                            src={tattoo.tattoURL}
-                            alt={tattoo.name}
-                          />
-                        </Col>
+                        <>
+                          <Col xs={2} className="d-xs-block d-md-none"></Col>
+                          <Col
+                            xs={8}
+                            md={6}
+                            lg={4}
+                            xl={4}
+                            key={i}
+                            className="mb-3"
+                          >
+                            <TattooCard tattoo={tattoo} />
+                          </Col>
+                          <Col xs={2} className="d-xs-block d-md-none"></Col>
+                        </>
                       ))}
                     </Row>
                   </Container>

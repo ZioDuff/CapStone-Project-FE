@@ -137,6 +137,24 @@ export const fetchDeleteOwnAccountAction = (token, navigate) => {
   }
 }
 
+export const fetchDeleteTattooArtistAction = (token, tattooArtistId) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.delete(
+        URL + "generics/delete/" + tattooArtistId,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+      alert("Eliminazione avvenuta con successo")
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+}
+
 export const fetchUploadAvatarAction = (token, formData) => {
   return async (dispatch) => {
     try {
