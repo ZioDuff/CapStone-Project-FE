@@ -11,7 +11,7 @@ const SingleTattooArtistPage = () => {
   )
   const loading = useSelector((state) => state.tattooArtist.loading)
   const tattoos = useSelector(
-    (state) => state.tattooArtist.singleTattooArtist.tattoos
+    (state) => state.tattooArtist.singleTattooArtist?.tattoos
   )
   const { id } = useParams()
   const dispatch = useDispatch()
@@ -59,7 +59,7 @@ const SingleTattooArtistPage = () => {
                     {singleTattooArtist?.description}
                   </div>
                 </div>
-                {tattoos.length > 0 ? (
+                {tattoos?.length > 0 ? (
                   <Container className="mt-5">
                     <Row>
                       <h2 className="text-light">

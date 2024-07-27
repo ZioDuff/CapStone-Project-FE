@@ -1,4 +1,5 @@
 import {
+  FETCH_ALL_TATTOO_SUCCESS,
   UPLOAD_TATTOO_FAILURE,
   UPLOAD_TATTOO_REQUEST,
   UPLOAD_TATTOO_SUCCESS,
@@ -7,6 +8,7 @@ import {
 const initialState = {
   isLoading: false,
   error: null,
+  singleTattoo: "",
   tattoos: [],
 }
 
@@ -20,13 +22,18 @@ const tattooReducer = (state = initialState, action) => {
     case UPLOAD_TATTOO_SUCCESS:
       return {
         ...state,
-        tattoos: action.payload,
+        singleTattoo: action.payload,
       }
     case UPLOAD_TATTOO_FAILURE:
       return {
         ...state,
         isLoading: false,
         error: action.isError,
+      }
+    case FETCH_ALL_TATTOO_SUCCESS:
+      return {
+        ...state,
+        tattoos: action.payload,
       }
     default:
       return state

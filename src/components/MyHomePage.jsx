@@ -1,11 +1,18 @@
 import "../style/partials/_myHomePage.scss"
 import { Button, Col, Container, Row } from "react-bootstrap"
 import MyCarousel from "./MyCarousel"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
+import { useEffect } from "react"
+import { fetchTattoosAction } from "../redux/actions"
 
 const MyHomePage = () => {
   const isLogged = useSelector((state) => state.user.isLogged)
+  const tattoos = useSelector((state) => state.tattoo?.tattoos)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(fetchTattoosAction())
+  }, [])
   return (
     <>
       <MyCarousel />
@@ -45,13 +52,28 @@ const MyHomePage = () => {
               )}
             </section>
           </Col>
-          <aside className="text-light my-3">
-            <Col>
-              <div>
-                <h3>QUA UNA FETCH GENERLE SUI TATTOO</h3>
-              </div>
-            </Col>
-          </aside>
+          <Container className="text-light my-3">
+            {tattoos?.length > 0 ? (
+              <>
+                <h2>
+                  Questi sono solo alcuni dei lavori fatti dai nostri Artisti
+                </h2>
+                <Row>
+                  {tattoos.map((tattoo, i) => (
+                    <Col xs={12} md={6} lg={4} xl={3} key={i} className="mb-3">
+                      <img
+                        className="w-100"
+                        src={tattoo.tattoURL}
+                        alt={tattoo.name}
+                      />
+                    </Col>
+                  ))}
+                </Row>
+              </>
+            ) : (
+              <h2>Non sono presenti ancora i lavori dei nostri artisti</h2>
+            )}
+          </Container>
         </Row>
       </Container>
     </>

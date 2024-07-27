@@ -18,6 +18,7 @@ export const FETCH_SINGLE_TATTOO_ARTIST_SUCCESS =
 export const UPLOAD_TATTOO_REQUEST = "UPLOAD_TATTOO_REQUEST"
 export const UPLOAD_TATTOO_SUCCESS = "UPLOAD_TATTOO_SUCCESS"
 export const UPLOAD_TATTOO_FAILURE = "UPLOAD_TATTOO_FAILURE"
+export const FETCH_ALL_TATTOO_SUCCESS = "FETCH_ALL_TATTOO_SUCCESS"
 
 const URL = "https://imperial-chandra-jacopo-b7942b29.koyeb.app/"
 
@@ -184,6 +185,21 @@ export const fetchUploadTattooAction = (token, formData) => {
         type: UPLOAD_TATTOO_SUCCESS,
         payload: response.data,
       })
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+}
+
+export const fetchTattoosAction = () => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(URL + "tattoos")
+      dispatch({
+        type: FETCH_ALL_TATTOO_SUCCESS,
+        payload: response.data.content,
+      })
+      console.log(response.data.content)
     } catch (err) {
       console.log(err.message)
     }
