@@ -61,11 +61,9 @@ const MyHomePage = () => {
                 </h2>
                 <Row className="justify-content-center">
                   {tattoos.map((tattoo, i) => (
-                    <>
-                      <Col xs={8} md={6} lg={4} xl={4} key={i} className="mb-3">
-                        <TattooCard tattoo={tattoo} />
-                      </Col>
-                    </>
+                    <Col xs={8} md={6} lg={4} xl={4} key={i} className="mb-3">
+                      <TattooCard tattoo={tattoo} />
+                    </Col>
                   ))}
                 </Row>
               </>

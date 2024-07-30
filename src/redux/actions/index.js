@@ -141,14 +141,31 @@ export const fetchDeleteTattooArtistAction = (token, tattooArtistId) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        URL + "generics/delete/" + tattooArtistId,
+        URL + `generics/delete/${tattooArtistId}`,
         {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
+          headers: { Authorization: "Bearer " + token },
         }
       )
       alert("Eliminazione avvenuta con successo")
+      dispatch({ type: FETCH_TATTOO_ARTISTS_SUCCESS, payload: response.data })
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+}
+
+export const fetchDeleteOwnTattooAction = (token, tattooId) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.delete(
+        URL + `generics/me/tattoo/${tattooId}`,
+        {
+          headers: { Authorization: "Bearer " + token },
+        }
+      )
+      alert("Tatuaggio eliminato con successo")
+      dispatch({ type: UPLOAD_TATTOO_REQUEST })
+      dispatch({ type: FETCH_ALL_TATTOO_SUCCESS })
     } catch (err) {
       console.log(err.message)
     }

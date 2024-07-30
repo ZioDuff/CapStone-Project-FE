@@ -52,7 +52,12 @@ const MyMainProfile = () => {
         "payload",
         JSON.stringify({ name: tattooName, description: tattooDescription })
       )
-      dispatch(fetchUploadTattooAction(token, formData))
+      dispatch(fetchUploadTattooAction(token, formData)).then(() => {
+        alert("Tatuaggio inserito con successo")
+        setTattooFile(null)
+        setTattooName("")
+        setTattooDescription("")
+      })
     }
   }
 
