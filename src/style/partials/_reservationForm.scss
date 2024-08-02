@@ -1,0 +1,44 @@
+.reservation-form {
+    
+ 
+
+
+    h2 {
+        color: gold;
+        margin-bottom: 20px;
+    }
+
+    .react-calendar {
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #1b1a1a;
+        width: 100%;
+    }
+
+    .react-calendar__navigation button:enabled:hover {
+        background-color: rgb(54, 54, 53) ;
+        
+    }
+
+    abbr[title] {
+        text-decoration: underline dotted;
+         cursor: help; 
+        text-decoration-skip-ink: none;
+        color: gold;
+    }
+    
+
+    .react-calendar__tile--now {
+       border-color: gold;
+    }
+
+
+    .react-calendar__tile:enabled:hover {
+        background-color: rgb(54, 54, 53);
+    }
+    
+
+  
+
+}

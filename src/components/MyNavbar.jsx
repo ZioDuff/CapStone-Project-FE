@@ -43,7 +43,9 @@ const MyNavbar = () => {
                 Crew
               </Nav.Link>
 
-              <Nav.Link>Prenotazioni</Nav.Link>
+              <Nav.Link as={Link} to="/prenota">
+                Prenota
+              </Nav.Link>
               {!isLogged ? (
                 <Nav.Link as={Link} to="/login">
                   Login

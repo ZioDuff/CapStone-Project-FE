@@ -317,6 +317,7 @@ const MyMainProfile = () => {
                         <Form.Label>Nome</Form.Label>
                         <Form.Control
                           defaultValue={loggedUser.name}
+                          onChange={(e) => setName(e.target.value)}
                           type="text"
                           required
                         />

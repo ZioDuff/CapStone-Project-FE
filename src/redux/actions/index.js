@@ -20,6 +20,10 @@ export const UPLOAD_TATTOO_SUCCESS = "UPLOAD_TATTOO_SUCCESS"
 export const UPLOAD_TATTOO_FAILURE = "UPLOAD_TATTOO_FAILURE"
 export const FETCH_ALL_TATTOO_SUCCESS = "FETCH_ALL_TATTOO_SUCCESS"
 
+export const ADD_RESERVATION = "ADD_RESERVATION"
+export const REMOVE_RESERVATION = "REMOVE_RESERVATION"
+export const SET_RESERVATIONS = "SET_RESERVATIONS"
+
 const URL = "https://imperial-chandra-jacopo-b7942b29.koyeb.app/"
 
 export const loginUserAction = (loginObj, navigate) => {
@@ -235,6 +239,47 @@ export const fetchTattoosAction = () => {
         payload: response.data.content,
       })
       console.log(response.data.content)
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+}
+
+export const fetchSaveReservationAction = (token, reservationObj) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.post(
+        URL + "reservations/me",
+        reservationObj,
+        {
+          headers: { Authorization: "Bearer " + token },
+        }
+      )
+      console.log(response.data)
+      dispatch({ type: ADD_RESERVATION, payload: response.data })
+      await dispatch(fetchUserInfoAction(token))
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+}
+
+export const fetchSaveTattooSessionReservationAction = (
+  token,
+  tattooSessionReservationObj
+) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.post(
+        URL + "reservations/tattooSessionRequest/me",
+        tattooSessionReservationObj,
+        {
+          headers: { Authorization: "Bearer " + token },
+        }
+      )
+      console.log(response.data)
+      dispatch({ type: ADD_RESERVATION, payload: response.data })
+      await dispatch(fetchUserInfoAction(token))
     } catch (err) {
       console.log(err.message)
     }

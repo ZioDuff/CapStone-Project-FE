@@ -7,6 +7,7 @@ import MyNavbar from "./components/MyNavbar"
 import MyMainProfile from "./components/MyMainProfile"
 import TattooArtistsPage from "./components/TattooArtistsPage"
 import SingleTattooArtistPage from "./components/SingleTattooArtistPage"
+import { ReservationPage } from "./components/ReservationPage"
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/profilePage" element={<MyMainProfile />} />
           <Route path="/tatuatori" element={<TattooArtistsPage />} />
           <Route path="/tatuatore/:id" element={<SingleTattooArtistPage />} />
+          <Route path="/prenota" element={<ReservationPage />} />
         </Routes>
       </BrowserRouter>
     </>
