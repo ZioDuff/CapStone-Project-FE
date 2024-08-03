@@ -285,3 +285,23 @@ export const fetchSaveTattooSessionReservationAction = (
     }
   }
 }
+
+export const fetchDeleteReservationAction = (token, reservationId) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.delete(
+        URL + `reservations/me/${reservationId}`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+      console.log("reservation", response)
+      alert("Elimazione avvenuta con sucesso")
+      await dispatch(fetchUserInfoAction(token))
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+}

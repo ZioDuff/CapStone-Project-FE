@@ -3,6 +3,9 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit"
 import tattooArtistReducer from "../reducers/tattooArtistReducer"
 import tattooReducer from "../reducers/tattooReducer"
 import reservationReducer from "../reducers/reservationReducer"
+import { persistStore, persistReducer } from "redux-persist"
+import storage from "redux-persist/lib/storage"
+import { encryptTransform } from "redux-persist-transform-encrypt"
 
 const rootReducer = combineReducers({
   user: fetchUserReducer,
@@ -11,7 +14,20 @@ const rootReducer = combineReducers({
   reservations: reservationReducer,
 })
 
-const store = configureStore({
-  reducer: rootReducer,
+const persistConfig = {
+  key: "root",
+  storage,
+  transforms: [
+    encryptTransform({
+      secretKey: import.meta.env.VITE_APP_PERSIST_KEY,
+    }),
+  ],
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
+export const store = configureStore({
+  reducer: persistedReducer,
 })
-export default store
+
+export const persistor = persistStore(store)

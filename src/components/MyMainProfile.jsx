@@ -11,9 +11,9 @@ import {
 import { Link, useNavigate } from "react-router-dom"
 
 const MyMainProfile = () => {
-  const isLogged = useSelector((state) => state.user.isLogged)
-  const loggedUser = useSelector((state) => state.user.user_info)
-  const token = useSelector((state) => state.user.user_bearer.accessToken)
+  const isLogged = useSelector((state) => state.user?.isLogged)
+  const loggedUser = useSelector((state) => state.user?.user_info)
+  const token = useSelector((state) => state.user.user_bearer?.accessToken)
 
   const [show, setShow] = useState(false)
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false)

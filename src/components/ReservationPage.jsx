@@ -5,26 +5,29 @@ import "../style/partials/_reservationForm.scss"
 import {
   Alert,
   Button,
+  Card,
   Col,
   Container,
   Form,
+  Modal,
   Row,
-  Table,
 } from "react-bootstrap"
 import Calendar from "react-calendar"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import {
+  fetchDeleteReservationAction,
   fetchSaveReservationAction,
   fetchSaveTattooSessionReservationAction,
   fetchTattooArtistsAction,
 } from "../redux/actions"
+import moment from "moment"
 export const ReservationPage = () => {
-  const loggedUser = useSelector((state) => state.user.user_info)
+  const loggedUser = useSelector((state) => state.user?.user_info)
   const reservations = useSelector(
     (state) => state.user?.user_info?.reservations
   )
-  const isLogged = useSelector((state) => state.user.isLogged)
+  const isLogged = useSelector((state) => state.user?.isLogged)
   const tattooArtistsArray = useSelector(
     (state) => state.tattooArtist?.tattooArtists
   )
@@ -35,15 +38,26 @@ export const ReservationPage = () => {
   const [timeReservation, setTimeReservation] = useState("")
   const [tattooArtistUsername, setTattooArtistusername] = useState("")
   const [username, setUsername] = useState("")
+  const [show, setShow] = useState(false)
+
+  const handleClose = () => setShow(false)
+  const handleShow = () => setShow(true)
 
   const handleDateChange = (newDate) => {
     setDateReservation(newDate)
   }
 
+  const handleDeleteReservation = (reservationId) => {
+    if (token) {
+      dispatch(fetchDeleteReservationAction(token, reservationId))
+    }
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault()
 
-    const formattedDate = dateReservation.toISOString().split("T")[0]
+    const formattedDate = moment(dateReservation).format("YYYY-MM-DD")
+
     const formattedTime = timeReservation + ":00"
 
     const reservationObj = {
@@ -57,7 +71,8 @@ export const ReservationPage = () => {
   const handleTattooSessionSubmit = (e) => {
     e.preventDefault()
 
-    const formattedDate = dateReservation.toISOString().split("T")[0]
+    const formattedDate = moment(dateReservation).format("YYYY-MM-DD")
+
     const formattedTime = timeReservation + ":00"
 
     const tattooSessionReservationObj = {
@@ -65,6 +80,7 @@ export const ReservationPage = () => {
       timeReservation: formattedTime,
       username: username,
     }
+    console.log(tattooSessionReservationObj)
     dispatch(
       fetchSaveTattooSessionReservationAction(
         token,
@@ -75,13 +91,14 @@ export const ReservationPage = () => {
 
   useEffect(() => {
     dispatch(fetchTattooArtistsAction())
+    console.log(dateReservation)
   }, [dispatch])
   return (
     <>
       <Container data-bs-theme="dark" className="text-center">
         <Row>
           <Col>
-            {loggedUser.role === "USER" && (
+            {loggedUser?.role === "USER" && (
               <>
                 <h1>Prenota ora la tua consultazione!</h1>
                 <p className="text-light">
@@ -92,7 +109,7 @@ export const ReservationPage = () => {
                 </p>
               </>
             )}
-            {loggedUser.role === "TATTOOARTIST" && (
+            {loggedUser?.role === "TATTOOARTIST" && (
               <>
                 <h1>Consulta le tue prenotazioni!</h1>
               </>
@@ -118,7 +135,7 @@ export const ReservationPage = () => {
             ) : (
               <Container>
                 <Row>
-                  {loggedUser.role === "USER" && (
+                  {loggedUser?.role === "USER" && (
                     <Form className="reservation-form" onSubmit={handleSubmit}>
                       <Alert variant="warning">
                         Fai attenzione una volta inviata la tua prenotazione non
@@ -130,7 +147,13 @@ export const ReservationPage = () => {
                           value={dateReservation}
                         />
                       </Col>
-                      <Col className="d-flex flex-column ">
+                      <Col
+                        xs={12}
+                        md={10}
+                        lg={8}
+                        xl={6}
+                        className="d-flex flex-column mx-auto "
+                      >
                         <p className="mt-2 text-light">
                           Data selezionata: {dateReservation.toDateString()}
                         </p>
@@ -138,6 +161,7 @@ export const ReservationPage = () => {
                         <Form.Label>
                           Ora:
                           <Form.Control
+                            required
                             type="time"
                             value={timeReservation}
                             onChange={(e) => setTimeReservation(e.target.value)}
@@ -146,17 +170,18 @@ export const ReservationPage = () => {
                         <Form.Label className="">
                           Tatuatore
                           <Form.Select
+                            required
                             className="mb-3"
                             onChange={(e) =>
                               setTattooArtistusername(e.target.value)
                             }
                           >
                             <option>artista</option>
-                            {tattooArtistsArray.length > 0 ? (
+                            {tattooArtistsArray?.length > 0 ? (
                               tattooArtistsArray.map((tattooArtist, i) => {
                                 return (
                                   <option key={i}>
-                                    {tattooArtist.username}
+                                    {tattooArtist?.username}
                                   </option>
                                 )
                               })
@@ -177,7 +202,7 @@ export const ReservationPage = () => {
                       onSubmit={handleTattooSessionSubmit}
                     >
                       <Alert variant="warning">
-                        Bentornato {loggedUser.username} , è il momento di una
+                        Bentornato {loggedUser?.username} , è il momento di una
                         nuova prenotazione
                       </Alert>
                       <Col>
@@ -194,6 +219,7 @@ export const ReservationPage = () => {
                         <Form.Label>
                           Ora:
                           <Form.Control
+                            required
                             type="time"
                             value={timeReservation}
                             onChange={(e) => setTimeReservation(e.target.value)}
@@ -202,6 +228,7 @@ export const ReservationPage = () => {
                         <Form.Label className="">
                           Utente
                           <Form.Control
+                            required
                             type="text"
                             placeholder="username utente.."
                             onChange={(e) => setUsername(e.target.value)}
@@ -219,43 +246,147 @@ export const ReservationPage = () => {
             <Container className="border-top mt-5">
               <Row>
                 {reservations?.length > 0 ? (
-                  <Col>
-                    <h4 className="text-light">Le tue prenotazioni</h4>
-                    <Table className="mt-4" striped bordered hover>
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Giorno</th>
-                          <th>Ora</th>
-                          <th>Tipologia</th>
-                          {loggedUser.role === "USER" && <th>Artista</th>}
-                          {loggedUser.role === "TATTOOARTIST" && (
-                            <th>Utente</th>
-                          )}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {reservations.map((reservation, i) => (
-                          <tr key={i}>
-                            <td>{i + 1}</td>
-                            <td>{reservation.dateReservation}</td>
-                            <td>{reservation.timeReservation}</td>
-                            <td>{reservation.typeReservation}</td>
-                            {loggedUser.role === "USER" && (
-                              <td>{reservation?.tattoArtist.username}</td>
-                            )}
-                            {loggedUser.role === "TATTOOARTIST" && (
-                              <td>{reservation?.user.username}</td>
-                            )}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  </Col>
-                ) : (
                   <>
-                    <p>Non hai prenotazioni</p>
+                    <h4 className="text-light my-4">Le tue prenotazioni</h4>
+                    {reservations.map((reservation, i) => (
+                      <Col key={i}>
+                        <Card className="mb-4">
+                          <Card.Header>
+                            Tipo di Prenotazione: {reservation?.typeReservation}
+                          </Card.Header>
+                          <Card.Body>
+                            <Card.Title className="mb-4">
+                              Data: {reservation?.dateReservation} - Ora:
+                              {reservation?.timeReservation}
+                            </Card.Title>
+                            <Card.Text as="div" className="mb-4">
+                              {loggedUser.role === "USER" && (
+                                <div className="d-flex justify-content-center align-items-center ">
+                                  <div className="me-2">
+                                    Artista: {reservation.tattoArtist?.username}
+                                  </div>
+                                  <div>
+                                    <img
+                                      className="reservation-img-card rounded-circle "
+                                      src={reservation.tattoArtist?.avatarURL}
+                                    />
+                                  </div>
+                                </div>
+                              )}
+                              {loggedUser.role === "TATTOOARTIST" && (
+                                <div className="d-flex justify-content-center align-items-center mb-4">
+                                  <div className="me-2">
+                                    Utente: {reservation.user?.username}
+                                  </div>
+                                  <div>
+                                    <img
+                                      className="reservation-img-card rounded-circle "
+                                      src={reservation.user?.avatarURL}
+                                    />
+                                  </div>
+                                </div>
+                              )}
+                            </Card.Text>
+                            {loggedUser?.role === "USER" &&
+                              reservation?.typeReservation ===
+                                "CONSULTATION" && (
+                                <>
+                                  <Button onClick={handleShow} variant="danger">
+                                    Elimina
+                                  </Button>
+                                  <Modal
+                                    show={show}
+                                    onHide={handleClose}
+                                    backdrop="static"
+                                    keyboard={false}
+                                  >
+                                    <Modal.Header closeButton>
+                                      <Modal.Title>
+                                        Elimina Prenotazione
+                                      </Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                      Sicuro di voler eliminare la prenotazione:
+                                      <span className="d-block">
+                                        Di tipo: {reservation?.typeReservation},
+                                      </span>
+                                      <span>
+                                        Con: {reservation.tattoArtist?.username}
+                                        ,
+                                      </span>
+                                      <span className="d-block">
+                                        in data: {reservation?.dateReservation}.
+                                      </span>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                      <Button
+                                        onClick={() =>
+                                          handleDeleteReservation(
+                                            reservation?.id
+                                          )
+                                        }
+                                        variant="danger"
+                                      >
+                                        Elimina
+                                      </Button>
+                                    </Modal.Footer>
+                                  </Modal>
+                                </>
+                              )}
+                            {loggedUser?.role === "TATTOOARTIST" &&
+                              reservation?.typeReservation ===
+                                "TATTOO_SESSION" && (
+                                <>
+                                  <Button onClick={handleShow} variant="danger">
+                                    Elimina
+                                  </Button>
+                                  <Modal
+                                    show={show}
+                                    onHide={handleClose}
+                                    backdrop="static"
+                                    keyboard={false}
+                                  >
+                                    <Modal.Header closeButton>
+                                      <Modal.Title>
+                                        Elimina Prenotazione
+                                      </Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                      Sicuro di voler eliminare la prenotazione:
+                                      <span className="d-block">
+                                        Di tipo: {reservation?.typeReservation},
+                                      </span>
+                                      <span>
+                                        Con: {reservation.user?.username},
+                                      </span>
+                                      <span className="d-block">
+                                        in data: {reservation?.dateReservation}.
+                                      </span>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                      <Button
+                                        onClick={() =>
+                                          handleDeleteReservation(
+                                            reservation?.id
+                                          )
+                                        }
+                                        variant="danger"
+                                      >
+                                        Elimina
+                                      </Button>
+                                    </Modal.Footer>
+                                  </Modal>
+                                </>
+                              )}
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    ))}
                   </>
+                ) : (
+                  <div>
+                    <p>Non hai prenotazioni</p>
+                  </div>
                 )}
               </Row>
             </Container>
