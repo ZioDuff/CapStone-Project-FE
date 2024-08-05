@@ -4,9 +4,11 @@ import {
   IS_ADMIN,
   REGISTERED_USER,
   RESET_STATE,
-  TOGGLE_AUTHORITY,
   TOGGLE_IS_LOGGED,
   UPDATE_USER_AVATAR,
+  UPDATE_USER_EMAIL,
+  UPDATE_USER_INFO,
+  UPDATE_USER_PASSWORD,
 } from "../actions"
 
 const initialState = {
@@ -39,11 +41,6 @@ const fetchUserReducer = (state = initialState, action) => {
         ...state,
         user_info: action.payload,
       }
-    case TOGGLE_AUTHORITY:
-      return {
-        ...state,
-        state: action.payload,
-      }
     case IS_ADMIN:
       return {
         ...state,
@@ -51,7 +48,7 @@ const fetchUserReducer = (state = initialState, action) => {
       }
     case RESET_STATE:
       return {
-        state: initialState,
+        ...initialState,
       }
     case UPDATE_USER_AVATAR:
       return {
@@ -59,6 +56,30 @@ const fetchUserReducer = (state = initialState, action) => {
         user_info: {
           ...state.user_info,
           avatarURL: action.payload,
+        },
+      }
+    case UPDATE_USER_INFO:
+      return {
+        ...state,
+        user_info: {
+          ...state.user_info,
+          ...action.payload,
+        },
+      }
+    case UPDATE_USER_EMAIL:
+      return {
+        ...state,
+        user_info: {
+          ...state.user_info,
+          email: action.payload,
+        },
+      }
+    case UPDATE_USER_PASSWORD:
+      return {
+        ...state,
+        user_info: {
+          ...state.user_info,
+          password: action.payload,
         },
       }
     default:

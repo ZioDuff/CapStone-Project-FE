@@ -5,6 +5,9 @@ import { useDispatch, useSelector } from "react-redux"
 import {
   fetchDeleteOwnAccountAction,
   fetchRegisterTattooArtistAction,
+  fetchUpdateUserEmail,
+  fetchUpdateUserInfo,
+  fetchUpdateUserPassword,
   fetchUploadAvatarAction,
   fetchUploadTattooAction,
 } from "../redux/actions"
@@ -20,6 +23,22 @@ const MyMainProfile = () => {
 
   const [isEmailFormVisible, setIsEmailFormVisible] = useState(false)
   const [isPasswordFormVisible, setIsPasswordFormVisible] = useState(false)
+
+  const [updateForm, setUpdateForm] = useState({
+    name: loggedUser?.name || "",
+    surname: loggedUser?.surname || "",
+    username: loggedUser?.username || "",
+    description: loggedUser?.description || "",
+    phoneNumber: loggedUser?.phoneNumber || "",
+  })
+
+  const [updateEmail, setUpdateEmail] = useState({
+    email: "",
+  })
+
+  const [updatePassword, setUpdatePassword] = useState({
+    password: "",
+  })
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -98,6 +117,22 @@ const MyMainProfile = () => {
 
   const handleUpdateUserInfo = (e) => {
     e.preventDefault()
+
+    dispatch(fetchUpdateUserInfo(token, updateForm))
+  }
+
+  const handleUpdateUserEmail = (e) => {
+    e.preventDefault()
+    dispatch(fetchUpdateUserEmail(token, updateEmail)).then(() => {
+      navigate("/login")
+    })
+  }
+
+  const handleUpdateUserPassword = (e) => {
+    e.preventDefault()
+    dispatch(fetchUpdateUserPassword(token, updatePassword)).then(() => {
+      navigate("/login")
+    })
   }
 
   const hanldeImageClick = () => {
@@ -316,8 +351,13 @@ const MyMainProfile = () => {
                       <Form.Group>
                         <Form.Label>Nome</Form.Label>
                         <Form.Control
-                          defaultValue={loggedUser.name}
-                          onChange={(e) => setName(e.target.value)}
+                          value={updateForm?.name}
+                          onChange={(e) =>
+                            setUpdateForm({
+                              ...updateForm,
+                              name: e.target.value,
+                            })
+                          }
                           type="text"
                           required
                         />
@@ -327,7 +367,13 @@ const MyMainProfile = () => {
                       <Form.Group>
                         <Form.Label>Cognome</Form.Label>
                         <Form.Control
-                          value={loggedUser.surname}
+                          value={updateForm?.surname}
+                          onChange={(e) =>
+                            setUpdateForm({
+                              ...updateForm,
+                              surname: e.target.value,
+                            })
+                          }
                           type="text"
                           required
                         />
@@ -337,7 +383,13 @@ const MyMainProfile = () => {
                       <Form.Group>
                         <Form.Label>Username</Form.Label>
                         <Form.Control
-                          value={loggedUser.username}
+                          value={updateForm?.username}
+                          onChange={(e) =>
+                            setUpdateForm({
+                              ...updateForm,
+                              username: e.target.value,
+                            })
+                          }
                           type="text"
                           required
                         />
@@ -349,7 +401,13 @@ const MyMainProfile = () => {
                           <Form.Group>
                             <Form.Label>Numero di telefono</Form.Label>
                             <Form.Control
-                              defaultValue={loggedUser.phoneNumber}
+                              value={updateForm?.phoneNumber}
+                              onChange={(e) =>
+                                setUpdateForm({
+                                  ...updateForm,
+                                  phoneNumber: e.target.value,
+                                })
+                              }
                               type="text"
                               required
                             />
@@ -359,7 +417,13 @@ const MyMainProfile = () => {
                           <Form.Group>
                             <Form.Label>Descrizione</Form.Label>
                             <Form.Control
-                              defaultValue={loggedUser.description}
+                              value={updateForm?.description}
+                              onChange={(e) =>
+                                setUpdateForm({
+                                  ...updateForm,
+                                  description: e.target.value,
+                                })
+                              }
                               as="textarea"
                               required
                             />
@@ -379,22 +443,34 @@ const MyMainProfile = () => {
                 <Row>
                   <Col xs={12} className="my-2">
                     <p className="mb-0">Email di accesso:</p>
-                    <p className="mb-0">{loggedUser.email}</p>
+                    <p className="mb-0">{loggedUser?.email}</p>
                     {!isEmailFormVisible ? (
                       <Button
                         onClick={() =>
                           setIsEmailFormVisible(!isEmailFormVisible)
                         }
                         className="mb-2 bg-transparent border-0 p-0 text-decoration-underline"
-                        Cambia
-                        email
                       >
                         Cambia la tua email
                       </Button>
                     ) : (
-                      <Form data-bs-theme="dark" className="mt-2">
+                      <Form
+                        onSubmit={handleUpdateUserEmail}
+                        data-bs-theme="dark"
+                        className="mt-2"
+                      >
                         <Form.Group className="position-relative">
-                          <Form.Control defaultValue={loggedUser.email} />
+                          <Form.Control
+                            required
+                            type="email"
+                            value={updateEmail?.email}
+                            onChange={(e) =>
+                              setUpdateEmail({
+                                ...updateEmail,
+                                email: e.target.value,
+                              })
+                            }
+                          />
                           <span
                             onClick={() => setIsEmailFormVisible(false)}
                             className="position-absolute end-0 top-50 translate-middle"
@@ -402,7 +478,9 @@ const MyMainProfile = () => {
                             ✖️
                           </span>
                         </Form.Group>
-                        <Button className="mt-2">invia</Button>
+                        <Button type="submit" className="mt-2">
+                          invia
+                        </Button>
                       </Form>
                     )}
                   </Col>
@@ -415,15 +493,26 @@ const MyMainProfile = () => {
                           setIsPasswordFormVisible(!isPasswordFormVisible)
                         }
                         className="mb-2 bg-transparent border-0 p-0 text-decoration-underline"
-                        Cambia
-                        email
                       >
                         Cambia la tua password
                       </Button>
                     ) : (
-                      <Form data-bs-theme="dark" className="mt-2">
+                      <Form
+                        onSubmit={handleUpdateUserPassword}
+                        data-bs-theme="dark"
+                        className="mt-2"
+                      >
                         <Form.Group className="position-relative">
-                          <Form.Control defaultValue={loggedUser.password} />
+                          <Form.Control
+                            required
+                            value={updatePassword?.password}
+                            onChange={(e) =>
+                              setUpdatePassword({
+                                ...updatePassword,
+                                password: e.target.value,
+                              })
+                            }
+                          />
                           <span
                             onClick={() => setIsPasswordFormVisible(false)}
                             className="position-absolute end-0 top-50 translate-middle"
@@ -431,7 +520,9 @@ const MyMainProfile = () => {
                             ✖️
                           </span>
                         </Form.Group>
-                        <Button className="mt-2">invia</Button>
+                        <Button type="submit" className="mt-2">
+                          invia
+                        </Button>
                       </Form>
                     )}
                   </Col>
