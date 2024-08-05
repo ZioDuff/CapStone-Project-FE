@@ -1,5 +1,5 @@
 import { Button, Container, Form, Spinner } from "react-bootstrap"
-
+import { FaEye, FaEyeSlash } from "react-icons/fa"
 import "../style/partials/_loginpage.scss"
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
@@ -10,6 +10,7 @@ const LoginPage = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  const [isVisible, setIsVisible] = useState(false)
   const [isLogged, setIsLogged] = useState(true)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -78,14 +79,25 @@ const LoginPage = () => {
                   placeholder="Esempio@gmail.com"
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formGroupPassword">
+              <Form.Group
+                className="mb-3 position-relative"
+                controlId="formGroupPassword"
+              >
                 <Form.Label>Inserisci la tua Password</Form.Label>
                 <Form.Control
+                  className="position-relative"
                   required
                   onChange={(e) => setPassword(e.target.value)}
-                  type="password"
+                  type={isVisible ? "text" : "password"}
                   placeholder="Password"
                 />
+                <span
+                  onClick={() => setIsVisible(!isVisible)}
+                  style={{ cursor: "pointer" }}
+                  className="position-absolute mt-3  top-50 end-0 translate-middle-y me-3"
+                >
+                  {!isVisible ? <FaEyeSlash /> : <FaEye />}
+                </span>
               </Form.Group>
               <Button type="submit" className="mb-2 btn-submit">
                 Login
