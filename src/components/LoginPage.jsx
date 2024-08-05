@@ -124,14 +124,25 @@ const LoginPage = () => {
                   placeholder="Esempio@gmail.com"
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formGroupPassword">
+              <Form.Group
+                className="mb-3 postion-relative "
+                controlId="formGroupPassword"
+              >
                 <Form.Label>Inserisci la tua Password</Form.Label>
                 <Form.Control
+                  className="position-relative"
                   required
                   onChange={(e) => setPassword(e.target.value)}
-                  type="password"
+                  type={isVisible ? "text" : "password"}
                   placeholder="Password"
                 />
+                <span
+                  onClick={() => setIsVisible(!isVisible)}
+                  style={{ cursor: "pointer" }}
+                  className="position-absolute mb-4   bottom-50 end-0 translate-middle-y me-4"
+                >
+                  {!isVisible ? <FaEyeSlash /> : <FaEye />}
+                </span>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formGroupName">
                 <Form.Label>Inserisci il tuo nome</Form.Label>

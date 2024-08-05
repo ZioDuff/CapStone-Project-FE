@@ -472,6 +472,7 @@ const MyMainProfile = () => {
                             }
                           />
                           <span
+                            style={{ cursor: "pointer" }}
                             onClick={() => setIsEmailFormVisible(false)}
                             className="position-absolute end-0 top-50 translate-middle"
                           >
@@ -514,6 +515,7 @@ const MyMainProfile = () => {
                             }
                           />
                           <span
+                            style={{ cursor: "pointer" }}
                             onClick={() => setIsPasswordFormVisible(false)}
                             className="position-absolute end-0 top-50 translate-middle"
                           >
