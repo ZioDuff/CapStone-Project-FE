@@ -8,6 +8,9 @@ export const GET_USER_LOGGED_TOKEN = "GET_USER_LOGGED_TOKEN"
 export const IS_ADMIN = "IS_ADMIN"
 export const RESET_STATE = "RESET_STATE"
 export const UPDATE_USER_AVATAR = "UPDATE_USER_AVATAR"
+export const UPDATE_USER_INFO = "UPDATE_USER_INFO"
+export const UPDATE_USER_EMAIL = "UPDATE_USER_EMAIL"
+export const UPDATE_USER_PASSWORD = "UPDATE_USER_PASSWORD"
 
 export const FETCH_TATTOO_ARTISTS_REQUEST = "FETCH_TATTOO_ARTISTS_REQUEST"
 export const FETCH_TATTOO_ARTISTS_SUCCESS = "FETCH_TATTOO_ARTISTS_SUCCESS"
@@ -300,6 +303,71 @@ export const fetchDeleteReservationAction = (token, reservationId) => {
       console.log("reservation", response)
       alert("Elimazione avvenuta con sucesso")
       await dispatch(fetchUserInfoAction(token))
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+}
+
+export const fetchUpdateUserInfo = (token, updateForm) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.put(URL + "generics/me", updateForm, {
+        headers: { Authorization: "Bearer " + token },
+      })
+      console.log(response.data)
+      await dispatch({
+        type: UPDATE_USER_INFO,
+        payload: response.data,
+      })
+      alert("Modifiche avvenute con successo!")
+      await dispatch(fetchUserInfoAction(token))
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+}
+
+export const fetchUpdateUserEmail = (token, updateEmail) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.patch(
+        URL + "generics/me/email",
+        updateEmail,
+        {
+          headers: { Authorization: "Bearer " + token },
+        }
+      )
+      console.log(response.data)
+      dispatch({
+        type: UPDATE_USER_EMAIL,
+        payload: response.data,
+      })
+      alert("Email cambiata con Successo")
+      await dispatch(logOutAction())
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+}
+
+export const fetchUpdateUserPassword = (token, updatePassword) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.patch(
+        URL + "generics/me/password",
+        updatePassword,
+        {
+          headers: { Authorization: "Bearer " + token },
+        }
+      )
+      console.log(response.data)
+      dispatch({
+        type: UPDATE_USER_PASSWORD,
+        payload: response.data,
+      })
+      alert("Password cambiata con successo, verrai rimandato al login")
+      await dispatch(logOutAction())
     } catch (err) {
       console.log(err.message)
     }
