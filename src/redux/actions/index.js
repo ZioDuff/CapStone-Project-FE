@@ -11,6 +11,7 @@ export const UPDATE_USER_AVATAR = "UPDATE_USER_AVATAR"
 export const UPDATE_USER_INFO = "UPDATE_USER_INFO"
 export const UPDATE_USER_EMAIL = "UPDATE_USER_EMAIL"
 export const UPDATE_USER_PASSWORD = "UPDATE_USER_PASSWORD"
+export const FETCH_USER_FAILURE = "FETCH_USER_FAILURE"
 
 export const FETCH_TATTOO_ARTISTS_REQUEST = "FETCH_TATTOO_ARTISTS_REQUEST"
 export const FETCH_TATTOO_ARTISTS_SUCCESS = "FETCH_TATTOO_ARTISTS_SUCCESS"
@@ -27,6 +28,13 @@ export const ADD_RESERVATION = "ADD_RESERVATION"
 export const REMOVE_RESERVATION = "REMOVE_RESERVATION"
 export const SET_RESERVATIONS = "SET_RESERVATIONS"
 
+export const SET_ERROR_LOGIN = "SET_ERROR_LOGIN"
+export const SET_ERROR_REGISTRATION = "SET_ERROR_REGISTRATION"
+export const CLEAR_ERROR = "CLEAR_ERROR"
+
+export const RUN_LOADING = "RUN_LOADING"
+export const STOP_LOADING = "STOP_LOADING"
+
 const URL = "https://imperial-chandra-jacopo-b7942b29.koyeb.app/"
 
 export const loginUserAction = (loginObj, navigate) => {
@@ -42,7 +50,11 @@ export const loginUserAction = (loginObj, navigate) => {
       dispatch({ type: TOGGLE_IS_LOGGED })
       navigate("/")
     } catch (err) {
-      console.log(err.message)
+      console.log(err.response.data.message)
+      const errMsg = err.response.data.message
+      dispatch({ type: SET_ERROR_LOGIN, payload: errMsg })
+    } finally {
+      dispatch({ type: STOP_LOADING })
     }
   }
 }
@@ -56,7 +68,10 @@ export const registerUserAction = (registerObj) => {
       })
       console.log(response.data)
     } catch (err) {
-      console.log(err.message)
+      const errMsg = err.response.data.message
+      dispatch({ type: SET_ERROR_REGISTRATION, payload: errMsg })
+    } finally {
+      dispatch({ type: STOP_LOADING })
     }
   }
 }

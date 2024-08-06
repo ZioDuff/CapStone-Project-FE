@@ -4,6 +4,8 @@ import {
   IS_ADMIN,
   REGISTERED_USER,
   RESET_STATE,
+  RUN_LOADING,
+  STOP_LOADING,
   TOGGLE_IS_LOGGED,
   UPDATE_USER_AVATAR,
   UPDATE_USER_EMAIL,
@@ -15,12 +17,24 @@ const initialState = {
   isLogged: false,
   isAdmin: false,
   isRegistered: false,
+  isLoading: false,
   user_bearer: "",
   user_info: {},
 }
 
 const fetchUserReducer = (state = initialState, action) => {
   switch (action.type) {
+    case RUN_LOADING:
+      return {
+        ...state,
+        isLoading: true,
+      }
+    case STOP_LOADING:
+      return {
+        ...state,
+        isLoading: false,
+      }
+
     case TOGGLE_IS_LOGGED:
       return {
         ...state,
@@ -82,6 +96,7 @@ const fetchUserReducer = (state = initialState, action) => {
           password: action.payload,
         },
       }
+
     default:
       return state
   }

@@ -25,11 +25,21 @@ body{
 
   .btn-submit {
     background-color: rgb(15, 14, 14);
-    border-color: #f3e998;
+    border-color: #D4AF37;
     &:hover{
-      background-color:#f3e998;
-      border-color: #f3e998;
+      background-color:#D4AF37;
+      border-color: #D4AF37;
       color: rgb(15, 14, 14);
     }
+
+  }
+
+  .btn:first-child:active,
+:not(.btn-check) + .btn:active {
+  background-color: gold;
+  border-color: gold
 }
   
+  .form-label {
+    font-size: 14px;
+  }
