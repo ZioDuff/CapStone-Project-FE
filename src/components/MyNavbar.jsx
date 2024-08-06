@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchUserInfoAction, logOutAction } from "../redux/actions"
 import { Link } from "react-router-dom"
-import logoStudio from "../assets/draw_svg20240619-7-124scw8.svg-removebg.png"
+import logoStudio from "../assets/4iff4587-removebg-preview.png"
 import { ButtonGroup, Navbar, Nav, Container, Dropdown } from "react-bootstrap"
 
 const MyNavbar = () => {

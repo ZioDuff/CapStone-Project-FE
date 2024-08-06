@@ -20,7 +20,9 @@ const MyHomePage = () => {
       <Container>
         <Row>
           <Col xs={12} className="text-center ">
-            <h1 className="my-3">Greatest Tattoo Studio</h1>
+            <h1 id="studio-headers" className="my-3">
+              Greatest Tattoo Studio
+            </h1>
             <section>
               <div>
                 <p>

@@ -1,22 +1,25 @@
-
+@import "./variables";
 
 .navbar {
-    background-color: rgba(127, 127, 127, 0);
+    background-color: $body-bg;
+   position: sticky;
+   top: 0;
+   z-index: 1001;
 }
 
 .navbar-toggler {
-    background-color:#f3e998
+    background-color:$primary
 }
 
 .navbar-nav{
     a {
         &:hover {
-            color: #b18e4c;
+            color: $primary;
             text-shadow: 0px 0px 10px gold;
         }
         & {
             font-weight: 600;
-            color: #f3e998;
+            color: $primary;
         }
     }
 }
