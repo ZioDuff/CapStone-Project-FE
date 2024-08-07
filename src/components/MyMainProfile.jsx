@@ -432,7 +432,7 @@ const MyMainProfile = () => {
               {loggedUser.role === "TATTOOARTIST" && (
                 <Container
                   data-bs-theme="dark"
-                  className="my-5 border-top border-bottom text-light py-4  "
+                  className="my-3 border-top border-bottom text-light py-4  "
                 >
                   <p className="text-decoration-underline">
                     Aggiungi un nuovo tatuaggio
@@ -443,24 +443,33 @@ const MyMainProfile = () => {
                     className="mt-2"
                   >
                     <Form.Group>
-                      <Form.Label>Nome del tatuaggio</Form.Label>
+                      <Form.Label className="mb-0">
+                        Nome del tatuaggio
+                      </Form.Label>
                       <Form.Control
+                        className="mb-2"
                         onChange={(e) => setTattooName(e.target.value)}
                         type="text"
                         placeholder="Es. dragone supremo"
                       />
                     </Form.Group>
                     <Form.Group>
-                      <Form.Label>Descrizione del tatuaggio</Form.Label>
+                      <Form.Label className="mb-0">
+                        Descrizione del tatuaggio
+                      </Form.Label>
                       <Form.Control
+                        className="mb-2"
                         onChange={(e) => setTattooDescription(e.target.value)}
                         type="text"
                         placeholder="Es. Ho svolto questo lavoro usando ecc..."
                       />
                     </Form.Group>
                     <Form.Group>
-                      <Form.Label>URL del Tattoo</Form.Label>
+                      <Form.Label className="mb-0">
+                        Immagine del Tattoo
+                      </Form.Label>
                       <Form.Control
+                        className="mb-2"
                         type="file"
                         onChange={(e) => setTattooFile(e.target.files[0])}
                       />
@@ -539,8 +548,11 @@ const MyMainProfile = () => {
                       <>
                         <Col md={6}>
                           <Form.Group>
-                            <Form.Label>Numero di telefono</Form.Label>
+                            <Form.Label className="mb-0">
+                              Numero di telefono
+                            </Form.Label>
                             <Form.Control
+                              className="mb-2"
                               value={updateForm?.phoneNumber}
                               onChange={(e) =>
                                 setUpdateForm({
@@ -555,8 +567,11 @@ const MyMainProfile = () => {
                         </Col>
                         <Col md={12}>
                           <Form.Group>
-                            <Form.Label>Descrizione</Form.Label>
+                            <Form.Label className="mb-0">
+                              Descrizione
+                            </Form.Label>
                             <Form.Control
+                              className="mb-2"
                               value={updateForm?.description}
                               onChange={(e) =>
                                 setUpdateForm({
