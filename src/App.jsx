@@ -8,6 +8,7 @@ import MyMainProfile from "./components/MyMainProfile"
 import TattooArtistsPage from "./components/TattooArtistsPage"
 import SingleTattooArtistPage from "./components/SingleTattooArtistPage"
 import { ReservationPage } from "./components/ReservationPage"
+import MyFooter from "./components/MyFooter"
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/tatuatore/:id" element={<SingleTattooArtistPage />} />
           <Route path="/prenota" element={<ReservationPage />} />
         </Routes>
+        <MyFooter />
       </BrowserRouter>
     </>
   )

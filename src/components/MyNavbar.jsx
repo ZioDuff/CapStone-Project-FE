@@ -24,7 +24,11 @@ const MyNavbar = () => {
   }, [dispatch, token])
   return (
     <>
-      <Navbar expand="lg" data-bs-theme="dark">
+      <Navbar
+        className="border-1 border-bottom border-primary"
+        expand="lg"
+        data-bs-theme="dark"
+      >
         <Container>
           <Navbar.Brand as={Link} to="/">
             <img

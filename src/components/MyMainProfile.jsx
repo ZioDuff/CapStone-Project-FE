@@ -1,8 +1,18 @@
 import "../style/partials/_myMainProfile.scss"
 import { useEffect, useRef, useState } from "react"
-import { Button, Col, Container, Modal, Row, Form } from "react-bootstrap"
+import {
+  Button,
+  Col,
+  Container,
+  Modal,
+  Row,
+  Form,
+  Spinner,
+  Alert,
+} from "react-bootstrap"
 import { useDispatch, useSelector } from "react-redux"
 import {
+  FETCH_TATTOO_ARTISTS_REQUEST,
   fetchDeleteOwnAccountAction,
   fetchRegisterTattooArtistAction,
   fetchUpdateUserEmail,
@@ -10,17 +20,21 @@ import {
   fetchUpdateUserPassword,
   fetchUploadAvatarAction,
   fetchUploadTattooAction,
+  RUN_LOADING,
 } from "../redux/actions"
 import { Link, useNavigate } from "react-router-dom"
-
+import { FaCamera, FaEye, FaEyeSlash, FaPlus } from "react-icons/fa"
 const MyMainProfile = () => {
+  const errorMessageRegister = useSelector(
+    (state) => state.error?.errorRegistration
+  )
   const isLogged = useSelector((state) => state.user?.isLogged)
   const loggedUser = useSelector((state) => state.user?.user_info)
   const token = useSelector((state) => state.user.user_bearer?.accessToken)
-
+  const isLoading = useSelector((state) => state.user?.isLoading)
   const [show, setShow] = useState(false)
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false)
-
+  const [isVisible, setIsVisible] = useState(false)
   const [isEmailFormVisible, setIsEmailFormVisible] = useState(false)
   const [isPasswordFormVisible, setIsPasswordFormVisible] = useState(false)
 
@@ -94,8 +108,8 @@ const MyMainProfile = () => {
       dateOfBirth: dateOfBirth,
     }
     try {
-      dispatch(fetchRegisterTattooArtistAction(token, registerObj))
-      alert("Artista creato con successo")
+      dispatch({ type: FETCH_TATTOO_ARTISTS_REQUEST })
+      dispatch(fetchRegisterTattooArtistAction(token, registerObj, handleClose))
       setEmail("")
       setPassword("")
       setName("")
@@ -105,7 +119,7 @@ const MyMainProfile = () => {
       setUsername("")
       setPhoneNumber(null)
     } catch (err) {
-      console.log(err.message)
+      errorMessageRegister
     }
   }
 
@@ -117,12 +131,13 @@ const MyMainProfile = () => {
 
   const handleUpdateUserInfo = (e) => {
     e.preventDefault()
-
+    dispatch({ type: RUN_LOADING })
     dispatch(fetchUpdateUserInfo(token, updateForm))
   }
 
   const handleUpdateUserEmail = (e) => {
     e.preventDefault()
+    dispatch({ type: RUN_LOADING })
     dispatch(fetchUpdateUserEmail(token, updateEmail)).then(() => {
       navigate("/login")
     })
@@ -130,6 +145,7 @@ const MyMainProfile = () => {
 
   const handleUpdateUserPassword = (e) => {
     e.preventDefault()
+    dispatch({ type: RUN_LOADING })
     dispatch(fetchUpdateUserPassword(token, updatePassword)).then(() => {
       navigate("/login")
     })
@@ -144,6 +160,7 @@ const MyMainProfile = () => {
       const file = e.target.files[0]
       const formData = new FormData()
       formData.append("avatar", file)
+      dispatch({ type: RUN_LOADING })
       dispatch(fetchUploadAvatarAction(token, formData))
       console.log(file)
     }
@@ -154,19 +171,47 @@ const MyMainProfile = () => {
       <Row>
         <Col className=" p-4">
           {!isLogged ? (
-            <Button as={Link} to="/login">
-              vai al login
-            </Button>
+            <Container>
+              <Row>
+                <Col className="text-center">
+                  <Alert variant="danger">
+                    Ops...Sembra che tu ancora non abbia fatto accesso alla
+                    nostra piattaforma!
+                  </Alert>
+                  <Button as={Link} to="/login">
+                    vai al login
+                  </Button>
+                </Col>
+              </Row>
+            </Container>
           ) : (
             <>
               <div className="d-flex align-items-center position-relative">
                 <div className="me-3">
-                  <img
-                    className="profile-avatar"
-                    src={loggedUser.avatarURL}
+                  <div
                     onClick={hanldeImageClick}
-                    alt="sono io"
-                  />
+                    className="position-relative image-container"
+                  >
+                    <img
+                      style={{ cursor: "pointer" }}
+                      className="profile-avatar"
+                      src={loggedUser.avatarURL}
+                      alt="sono io"
+                    />
+                    {isLoading ? (
+                      <Spinner
+                        className="overlay-spinner"
+                        animation="border"
+                        role="status"
+                      >
+                        <span className="visually-hidden">Loading...</span>
+                      </Spinner>
+                    ) : (
+                      <div className="overlay">
+                        <FaCamera className="camera-icon" />
+                      </div>
+                    )}
+                  </div>
                   <Form.Control
                     ref={fileInput}
                     className="d-none"
@@ -175,13 +220,21 @@ const MyMainProfile = () => {
                   />
                 </div>
                 <div className="text-light">
-                  <h2>{loggedUser.username}</h2>
+                  <h2
+                    style={{ textTransform: "uppercase" }}
+                    className="fs-1 fw-semibold"
+                  >
+                    {loggedUser.username}
+                  </h2>
                   {loggedUser.role === "ADMIN" && (
                     <Button
                       onClick={handleShow}
-                      className="btn btn-primary position-absolute end-0"
+                      className="d-flex align-items-center btn btn-primary position-absolute end-0"
                     >
-                      inserisci nuovo Artista
+                      <span className="me-1">Nuovo Artista</span>
+                      <span>
+                        <FaPlus />
+                      </span>
                     </Button>
                   )}
                   <Modal show={show} onHide={handleClose}>
@@ -189,105 +242,189 @@ const MyMainProfile = () => {
                       <Modal.Title>Registarzione Nuovo Tatuatore</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                      <Form onSubmit={handleRegisterSubmit}>
-                        <Form.Group
-                          className="mb-3"
-                          controlId="formGroupUserName"
+                      {isLoading ? (
+                        <div
+                          style={{
+                            minHeight: "400px",
+                          }}
+                          className="d-flex justify-content-center align-items-center"
                         >
-                          <Form.Label>Scegli un Username</Form.Label>
-                          <Form.Control
-                            required
-                            onChange={(e) => setUsername(e.target.value)}
-                            type="text"
-                            placeholder="Es. Goku"
-                          />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formGroupEmail">
-                          <Form.Label>Inserisci la tua Email</Form.Label>
-                          <Form.Control
-                            required
-                            onChange={(e) => setEmail(e.target.value)}
-                            type="email"
-                            placeholder="Esempio@gmail.com"
-                          />
-                        </Form.Group>
-                        <Form.Group
-                          className="mb-3"
-                          controlId="formGroupPassword"
-                        >
-                          <Form.Label>Inserisci la tua Password</Form.Label>
-                          <Form.Control
-                            required
-                            onChange={(e) => setPassword(e.target.value)}
-                            type="password"
-                            placeholder="Password"
-                          />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formGroupName">
-                          <Form.Label>Inserisci il tuo nome</Form.Label>
-                          <Form.Control
-                            required
-                            onChange={(e) => setName(e.target.value)}
-                            type="text"
-                            placeholder="Es. Mario"
-                          />
-                        </Form.Group>
-                        <Form.Group
-                          className="mb-3"
-                          controlId="formGroupSurname"
-                        >
-                          <Form.Label>Inserisci il tuo cognome</Form.Label>
-                          <Form.Control
-                            required
-                            onChange={(e) => setSurname(e.target.value)}
-                            type="text"
-                            placeholder="Es. Rossi"
-                          />
-                        </Form.Group>
-                        <Form.Group
-                          className="mb-3"
-                          controlId="formGroupDescription"
-                        >
-                          <Form.Label>Inserisci una descrizione</Form.Label>
-                          <Form.Control
-                            required
-                            onChange={(e) => setDescription(e.target.value)}
-                            as="textarea"
-                            rows={3}
-                            placeholder="Faccio questo lavoro perchè..."
-                          />
-                        </Form.Group>
-                        <Form.Group
-                          className="mb-3"
-                          controlId="formGroupPhoneNumber"
-                        >
-                          <Form.Label>
-                            Inserisci il numero di telefono
-                          </Form.Label>
-                          <Form.Control
-                            required
-                            onChange={(e) => setPhoneNumber(e.target.value)}
-                            type="text"
-                            placeholder="Es. 3341313131"
-                          />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formGroupAge">
-                          <Form.Label>Anno di nascita</Form.Label>
-                          <Form.Control
-                            required
-                            onChange={(e) => setDateOfBirth(e.target.value)}
-                            type="date"
-                            placeholder="yyyy/mm/dd"
-                          />
-                        </Form.Group>
-                        <Button
-                          onClick={handleClose}
-                          type="submit"
-                          className="mb-2"
-                        >
-                          invia
-                        </Button>
-                      </Form>
+                          <Spinner
+                            className="text-primary "
+                            animation="border"
+                            role="status"
+                          >
+                            <span className="visually-hidden">Loading...</span>
+                          </Spinner>
+                        </div>
+                      ) : (
+                        <Form onSubmit={handleRegisterSubmit}>
+                          <Row>
+                            <Col xs={12} md={6}>
+                              <Form.Group
+                                className="mb-3"
+                                controlId="formGroupUserName"
+                              >
+                                <Form.Label className="label-new-artist">
+                                  Inserisci Username
+                                </Form.Label>
+                                <Form.Control
+                                  className="text-light"
+                                  required
+                                  onChange={(e) => setUsername(e.target.value)}
+                                  type="text"
+                                  placeholder="Es. Goku"
+                                />
+                              </Form.Group>
+                            </Col>
+                            <Col xs={12} md={6}>
+                              <Form.Group
+                                className="mb-3"
+                                controlId="formGroupEmail"
+                              >
+                                <Form.Label className="label-new-artist">
+                                  Inserisci Email
+                                </Form.Label>
+                                <Form.Control
+                                  className="text-light"
+                                  required
+                                  onChange={(e) => setEmail(e.target.value)}
+                                  type="email"
+                                  placeholder="Esempio@gmail.com"
+                                />
+                              </Form.Group>
+                            </Col>
+                            <Col xs={12} md={6}>
+                              <Form.Group
+                                className="mb-3 position-relative"
+                                controlId="formGroupPassword"
+                              >
+                                <Form.Label className="label-new-artist">
+                                  Inserisci Password
+                                </Form.Label>
+                                <Form.Control
+                                  className=" text-light"
+                                  required
+                                  onChange={(e) => setPassword(e.target.value)}
+                                  type={isVisible ? "text" : "password"}
+                                  placeholder="Password"
+                                />
+                                <span
+                                  onClick={() => setIsVisible(!isVisible)}
+                                  style={{ cursor: "pointer" }}
+                                  className="position-absolute mt-3 text-light  top-50 end-0 translate-middle-y me-3"
+                                >
+                                  {!isVisible ? <FaEyeSlash /> : <FaEye />}
+                                </span>
+                              </Form.Group>
+                            </Col>
+                            <Col xs={12} md={6}>
+                              <Form.Group
+                                className="mb-3"
+                                controlId="formGroupName"
+                              >
+                                <Form.Label className="label-new-artist">
+                                  Inserisci nome
+                                </Form.Label>
+                                <Form.Control
+                                  className="text-light"
+                                  required
+                                  onChange={(e) => setName(e.target.value)}
+                                  type="text"
+                                  placeholder="Es. Mario"
+                                />
+                              </Form.Group>
+                            </Col>
+                            <Col xs={12} md={6}>
+                              <Form.Group
+                                className="mb-3"
+                                controlId="formGroupSurname"
+                              >
+                                <Form.Label className="label-new-artist">
+                                  Inserisci cognome
+                                </Form.Label>
+                                <Form.Control
+                                  className="text-light"
+                                  required
+                                  onChange={(e) => setSurname(e.target.value)}
+                                  type="text"
+                                  placeholder="Es. Rossi"
+                                />
+                              </Form.Group>
+                            </Col>
+                            <Col xs={12} md={6}>
+                              <Form.Group
+                                className="mb-3"
+                                controlId="formGroupPhoneNumber"
+                              >
+                                <Form.Label className="label-new-artist">
+                                  Inserisci numero di telefono
+                                </Form.Label>
+                                <Form.Control
+                                  className="text-light"
+                                  required
+                                  onChange={(e) =>
+                                    setPhoneNumber(e.target.value)
+                                  }
+                                  type="text"
+                                  placeholder="Es. 3341313131"
+                                />
+                              </Form.Group>
+                            </Col>
+                            <Col xs={12}>
+                              <Form.Group
+                                className="mb-3 position-relative"
+                                controlId="formGroupAge"
+                              >
+                                <Form.Label className="label-new-artist">
+                                  Inserisci data di nascita
+                                </Form.Label>
+                                <Form.Control
+                                  className="text-light"
+                                  required
+                                  onChange={(e) =>
+                                    setDateOfBirth(e.target.value)
+                                  }
+                                  type="date"
+                                  placeholder="yyyy/mm/dd"
+                                />
+                              </Form.Group>
+                            </Col>
+                            <Col xs={12}>
+                              <Form.Group
+                                className="mb-3"
+                                controlId="formGroupDescription"
+                              >
+                                <Form.Label className="label-new-artist">
+                                  Inserisci descrizione
+                                </Form.Label>
+                                <Form.Control
+                                  className="text-light"
+                                  required
+                                  onChange={(e) =>
+                                    setDescription(e.target.value)
+                                  }
+                                  as="textarea"
+                                  rows={3}
+                                  placeholder="Faccio questo lavoro perchè..."
+                                />
+                              </Form.Group>
+                              {errorMessageRegister && (
+                                <Col>
+                                  <Alert variant="danger">
+                                    {errorMessageRegister}
+                                  </Alert>
+                                </Col>
+                              )}
+                            </Col>
+                            <Col>
+                              <Button type="submit" className="mb-2 w-100">
+                                Invia
+                              </Button>
+                            </Col>
+                          </Row>
+                        </Form>
+                      )}
                     </Modal.Body>
                   </Modal>
                 </div>
@@ -338,9 +475,9 @@ const MyMainProfile = () => {
                 data-bs-theme="dark"
                 className="text-light border-top  mt-4"
               >
-                <Button className="p-0 my-4 bg-transparent border-0 text-decoration-underline ">
+                <p className=" my-4  text-decoration-underline ">
                   Controlla e modfica le tue info personali
-                </Button>
+                </p>
 
                 <Form
                   className="border-bottom mb-4 pb-4"
@@ -349,8 +486,9 @@ const MyMainProfile = () => {
                   <Row>
                     <Col md={6}>
                       <Form.Group>
-                        <Form.Label>Nome</Form.Label>
+                        <Form.Label className="mb-0">Nome</Form.Label>
                         <Form.Control
+                          className="mb-2"
                           value={updateForm?.name}
                           onChange={(e) =>
                             setUpdateForm({
@@ -365,8 +503,9 @@ const MyMainProfile = () => {
                     </Col>
                     <Col md={6}>
                       <Form.Group>
-                        <Form.Label>Cognome</Form.Label>
+                        <Form.Label className="mb-0">Cognome</Form.Label>
                         <Form.Control
+                          className="mb-2"
                           value={updateForm?.surname}
                           onChange={(e) =>
                             setUpdateForm({
@@ -381,8 +520,9 @@ const MyMainProfile = () => {
                     </Col>
                     <Col md={6}>
                       <Form.Group>
-                        <Form.Label>Username</Form.Label>
+                        <Form.Label className="mb-0">Username</Form.Label>
                         <Form.Control
+                          className="mb-2"
                           value={updateForm?.username}
                           onChange={(e) =>
                             setUpdateForm({
@@ -432,8 +572,20 @@ const MyMainProfile = () => {
                       </>
                     )}
                     <Col xs={12}>
-                      <Button type="submit" className="my-4 ">
-                        Invia Cambiamenti
+                      <Button
+                        style={{
+                          minWidth: "150px",
+                        }}
+                        type="submit"
+                        className="my-4 "
+                      >
+                        {!isLoading ? (
+                          <span>Invia Cambiamenti</span>
+                        ) : (
+                          <Spinner animation="border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                          </Spinner>
+                        )}
                       </Button>
                     </Col>
                   </Row>
@@ -445,21 +597,22 @@ const MyMainProfile = () => {
                     <p className="mb-0">Email di accesso:</p>
                     <p className="mb-0">{loggedUser?.email}</p>
                     {!isEmailFormVisible ? (
-                      <Button
+                      <p
+                        style={{ cursor: "pointer" }}
                         onClick={() =>
                           setIsEmailFormVisible(!isEmailFormVisible)
                         }
-                        className="mb-2 bg-transparent border-0 p-0 text-decoration-underline"
+                        className="mb-2  text-decoration-underline"
                       >
                         Cambia la tua email
-                      </Button>
+                      </p>
                     ) : (
                       <Form
                         onSubmit={handleUpdateUserEmail}
                         data-bs-theme="dark"
                         className="mt-2"
                       >
-                        <Form.Group className="position-relative">
+                        <Form.Group className="position-relative mb-4">
                           <Form.Control
                             required
                             type="email"
@@ -479,8 +632,16 @@ const MyMainProfile = () => {
                             ✖️
                           </span>
                         </Form.Group>
-                        <Button type="submit" className="mt-2">
-                          invia
+                        <Button type="submit" className="my-2">
+                          {!isLoading ? (
+                            <span>Invia</span>
+                          ) : (
+                            <Spinner animation="border" role="status">
+                              <span className="visually-hidden">
+                                Loading...
+                              </span>
+                            </Spinner>
+                          )}
                         </Button>
                       </Form>
                     )}
@@ -489,21 +650,22 @@ const MyMainProfile = () => {
                     <p className="mb-0">Password di accesso:</p>
                     <p className="mb-0">● ● ● ● ● ●</p>
                     {!isPasswordFormVisible ? (
-                      <Button
+                      <p
+                        style={{ cursor: "pointer" }}
                         onClick={() =>
                           setIsPasswordFormVisible(!isPasswordFormVisible)
                         }
-                        className="mb-2 bg-transparent border-0 p-0 text-decoration-underline"
+                        className="mb-2  text-decoration-underline"
                       >
                         Cambia la tua password
-                      </Button>
+                      </p>
                     ) : (
                       <Form
                         onSubmit={handleUpdateUserPassword}
                         data-bs-theme="dark"
                         className="mt-2"
                       >
-                        <Form.Group className="position-relative">
+                        <Form.Group className="position-relative  mb-4">
                           <Form.Control
                             required
                             value={updatePassword?.password}
@@ -522,8 +684,16 @@ const MyMainProfile = () => {
                             ✖️
                           </span>
                         </Form.Group>
-                        <Button type="submit" className="mt-2">
-                          invia
+                        <Button type="submit" className="my-2">
+                          {!isLoading ? (
+                            <span>Invia</span>
+                          ) : (
+                            <Spinner animation="border" role="status">
+                              <span className="visually-hidden">
+                                Loading...
+                              </span>
+                            </Spinner>
+                          )}
                         </Button>
                       </Form>
                     )}
@@ -543,7 +713,9 @@ const MyMainProfile = () => {
                         <Modal.Title>Eliminazione Account</Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
-                        Attenzione premendo Elimina perderai l'account!
+                        <Alert variant="danger">
+                          Attenzione premendo Elimina perderai l'account!
+                        </Alert>
                       </Modal.Body>
                       <Modal.Footer>
                         <Button variant="danger" onClick={deleteAccount}>

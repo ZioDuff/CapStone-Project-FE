@@ -95,8 +95,12 @@ export const fetchUserInfoAction = (token) => {
   }
 }
 
-export const fetchRegisterTattooArtistAction = (token, registerObj) => {
-  return async () => {
+export const fetchRegisterTattooArtistAction = (
+  token,
+  registerObj,
+  handleClose
+) => {
+  return async (dispatch) => {
     try {
       const response = await axios.post(
         URL + "generics/enroll/tattooArtist",
@@ -105,9 +109,16 @@ export const fetchRegisterTattooArtistAction = (token, registerObj) => {
           headers: { Authorization: "Bearer " + token },
         }
       )
-      console.log(response)
+
+      dispatch({ type: FETCH_TATTOO_ARTISTS_SUCCESS, payload: response.data })
+      alert("Artista creato con successo")
+      handleClose()
+      console.log(response.data)
     } catch (err) {
-      console.log(err.message)
+      const errMsg = err.response.data.message
+      dispatch({ type: SET_ERROR_REGISTRATION, payload: errMsg })
+    } finally {
+      dispatch({ type: FETCH_TATTOO_ARTISTS_FAILURE })
     }
   }
 }
@@ -124,6 +135,8 @@ export const fetchTattooArtistsAction = () => {
       console.log(response.data)
     } catch (err) {
       console.log(err.message)
+    } finally {
+      dispatch({ type: FETCH_TATTOO_ARTISTS_FAILURE })
     }
   }
 }
@@ -207,6 +220,8 @@ export const fetchUploadAvatarAction = (token, formData) => {
       dispatch(updateUserAvatar(response.data))
     } catch (err) {
       console.log(err.message)
+    } finally {
+      dispatch({ type: STOP_LOADING })
     }
   }
 }
@@ -339,6 +354,8 @@ export const fetchUpdateUserInfo = (token, updateForm) => {
       await dispatch(fetchUserInfoAction(token))
     } catch (err) {
       console.log(err.message)
+    } finally {
+      dispatch({ type: STOP_LOADING })
     }
   }
 }
@@ -362,6 +379,8 @@ export const fetchUpdateUserEmail = (token, updateEmail) => {
       await dispatch(logOutAction())
     } catch (err) {
       console.log(err.message)
+    } finally {
+      dispatch({ type: STOP_LOADING })
     }
   }
 }
@@ -385,6 +404,8 @@ export const fetchUpdateUserPassword = (token, updatePassword) => {
       await dispatch(logOutAction())
     } catch (err) {
       console.log(err.message)
+    } finally {
+      dispatch({ type: STOP_LOADING })
     }
   }
 }
