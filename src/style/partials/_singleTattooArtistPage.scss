@@ -1,6 +1,54 @@
-.artist-avatar {
-    border-radius: 20px;
-    width: 70%;
-    aspect-ratio: 4/3;
-    object-fit: cover;
+.artist-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .artist-avatar {
+    width: 100%;
+    height: auto;
+  }
+  
+  .artist-info {
+    margin-top: 1rem;
+    text-transform: uppercase;
+  }
+
+  .icon-social-artist-page {
+    width: 50px;
+    height: 50px;
+    color: #d7b237;
+    cursor: pointer;
 }
+  
+  @media screen and (min-width: 768px) {
+    .artist-container {
+      flex-direction: row;
+      justify-content: center;
+      
+    }
+
+    .artist-content {
+        display: flex;
+    }
+
+    
+  
+    .artist-avatar {
+      width: 270px;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: 50%;
+      
+      
+    }
+  
+    .artist-info {
+      
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-left: 1rem;
+    }
+  }

@@ -153,6 +153,8 @@ export const fetchSingleTattooArtistAction = (id) => {
       console.log(response.data)
     } catch (err) {
       console.log(err.message)
+    } finally {
+      dispatch({ type: FETCH_TATTOO_ARTISTS_FAILURE })
     }
   }
 }

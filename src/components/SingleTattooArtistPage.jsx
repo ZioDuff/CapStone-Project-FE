@@ -1,14 +1,23 @@
 import "../style/partials/_singleTattooArtistPage.scss"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import {
   fetchDeleteOwnTattooAction,
   fetchSingleTattooArtistAction,
 } from "../redux/actions"
-import { Button, Col, Container, Modal, Row, Spinner } from "react-bootstrap"
+import {
+  Alert,
+  Button,
+  Col,
+  Container,
+  Modal,
+  Row,
+  Spinner,
+} from "react-bootstrap"
 import TattooCard from "./TattooCard"
 import { fetchDeleteTattooArtistAction } from "../redux/actions"
+import { FaFacebook, FaInstagram, FaRecycle, FaTrash } from "react-icons/fa"
 const SingleTattooArtistPage = () => {
   const singleTattooArtist = useSelector(
     (state) => state.tattooArtist.singleTattooArtist
@@ -53,9 +62,20 @@ const SingleTattooArtistPage = () => {
 
   if (loading) {
     return (
-      <Spinner animation="border" role="status">
-        <span className="visually-hidden">Loading...</span>
-      </Spinner>
+      <Container>
+        <Row>
+          <Col
+            className="d-flex align-items-center justify-content-center"
+            style={{ minHeight: "100vh" }}
+          >
+            <div>
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </div>
+          </Col>
+        </Row>
+      </Container>
     )
   }
 
@@ -65,25 +85,35 @@ const SingleTattooArtistPage = () => {
         <Row className="justify-content-center">
           <Col xs={12}>
             {!singleTattooArtist ? (
-              <p>nessun artista trovato</p>
+              <div className="text-center">
+                <h1>OOPS..!</h1>
+                <Alert variant="danger">
+                  Sembra che ci sia stato un errore!
+                  <br />
+                  ci scusiamo per il disagio, continua la navigazione
+                </Alert>
+                <Button as={Link} to="/" className="mb-5">
+                  Torna alla Home
+                </Button>
+              </div>
             ) : (
               <>
-                <div className=" position-relative d-flex align-items-center justify-content-around  ">
-                  <div>
+                <div className=" artist-container ">
+                  <div className="artist-content">
                     <img
-                      className="artist-avatar"
+                      className=" artist-avatar"
                       src={singleTattooArtist?.avatarURL}
                       alt={singleTattooArtist?.username}
                     />
-                  </div>
-                  <div className="text-light">
-                    <h2>{singleTattooArtist?.username}</h2>
+                    <div className="artist-info">
+                      <h1>{singleTattooArtist?.username}</h1>
+                    </div>
                   </div>
                 </div>
                 <div className="mt-4 text-light d-flex align-items-center justify-content-around border-bottom pb-4  ">
                   {isAdmin && (
                     <div>
-                      <Button onClick={handleShowDeleteModal}>
+                      <Button variant="danger" onClick={handleShowDeleteModal}>
                         Elimina artista
                       </Button>
                       <Modal
@@ -94,11 +124,30 @@ const SingleTattooArtistPage = () => {
                           <Modal.Title>Eliminazione Artista</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                          <h4>Sei sicuro di voler eliminare l'artista:</h4>
-                          <p>{singleTattooArtist?.username}</p>
-                          <h4>
-                            PERDERAI ANCHE TUTTI I TATUAGGI LEGATI ALL'ARTISTA
+                          <h4 className="text-light">
+                            Sei sicuro di voler eliminare l'artista:
                           </h4>
+                          <p className="text-light">
+                            username:
+                            <span className="ms-1 fw-bold text-primary">
+                              {singleTattooArtist?.username}
+                            </span>
+                          </p>
+                          <p className="text-light">
+                            nome:
+                            <span className="ms-1 fw-bold text-primary">
+                              {singleTattooArtist?.name}
+                            </span>
+                          </p>
+                          <p className="text-light">
+                            cognome:
+                            <span className="ms-1 fw-bold text-primary">
+                              {singleTattooArtist?.surname}
+                            </span>
+                          </p>
+                          <Alert variant="danger">
+                            PERDERAI ANCHE TUTTI I TATUAGGI LEGATI ALL'ARTISTA!
+                          </Alert>
                         </Modal.Body>
                         <Modal.Footer>
                           <Button
@@ -112,19 +161,24 @@ const SingleTattooArtistPage = () => {
                     </div>
                   )}
                   <div>
-                    <p className="m-0">qui icona instagram e facebook</p>
+                    <a href="#" className=" mx-3">
+                      <FaInstagram className="icon-social-artist-page" />
+                    </a>
+                    <a href="#">
+                      <FaFacebook className="icon-social-artist-page" />
+                    </a>
                   </div>
                 </div>
                 <div className="mt-4 d-flex flex-column align-items-center border-bottom pb-5">
-                  <h1>Qualcosa su di me!</h1>
+                  <h2 className="fs-1">Qualcosa su di me!</h2>
                   <div className="text-light">
                     {singleTattooArtist?.description}
                   </div>
                 </div>
                 {tattoos?.length > 0 ? (
-                  <Container className="mt-5">
-                    <h2 className="text-light">
-                      questi sono alucni dei miei lavori
+                  <Container className="mt-3">
+                    <h2 className="mb-3 fs-1 text-primary text-center">
+                      Questi sono alucni dei miei lavori!
                     </h2>
                     <Row className="justify-content-center">
                       {tattoos.map((tattoo, i) => (
@@ -140,10 +194,11 @@ const SingleTattooArtistPage = () => {
                           {tattooArtistId === id && (
                             <div className="position-absolute end-0 top-0 pt-2 pe-3">
                               <span
+                                className="pe-2"
                                 style={{ cursor: "pointer" }}
                                 onClick={handleShowDeleteModal}
                               >
-                                ✖️
+                                <FaTrash className="text-danger " />
                               </span>
                               <Modal
                                 show={showDeleteModal}
@@ -155,10 +210,15 @@ const SingleTattooArtistPage = () => {
                                   </Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body>
-                                  <h4>
+                                  <h4 className="text-light">
                                     Sei sicuro di voler eliminare il tatuaggio:
                                   </h4>
-                                  <p>{tattoo.name}</p>
+                                  <p className="text-light">
+                                    nome:
+                                    <span className="ms-1 fw-bold text-primary">
+                                      {singleTattooArtist?.surname}
+                                    </span>
+                                  </p>
                                 </Modal.Body>
                                 <Modal.Footer>
                                   <Button
@@ -179,9 +239,10 @@ const SingleTattooArtistPage = () => {
                   </Container>
                 ) : (
                   <div className="mt-5">
-                    <h2 className="text-light">
-                      I miei lavori arriveranno presto !
-                    </h2>
+                    <Alert className="text-light text-center">
+                      I miei lavori arriveranno presto ! <br /> Puoi guardare i
+                      lavori dei miei colleghi!
+                    </Alert>
                   </div>
                 )}
               </>

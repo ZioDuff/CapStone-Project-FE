@@ -1,5 +1,6 @@
 import { Card } from "react-bootstrap"
 import "../style/partials/_tattooCard.scss"
+import { Link } from "react-router-dom"
 
 const TattooCard = ({ tattoo }) => {
   // const tattooArtistId = useSelector((state) => state.user?.user_info?.id)
@@ -20,7 +21,7 @@ const TattooCard = ({ tattoo }) => {
 
   return (
     <>
-      <Card border="warning">
+      <Card as={Link} to={tattoo.tattoURL} target="_blank" border="primary">
         <Card.Img
           className="tattoo-card"
           src={tattoo.tattoURL}
