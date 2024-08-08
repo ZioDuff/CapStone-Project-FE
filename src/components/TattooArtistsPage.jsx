@@ -17,9 +17,20 @@ const TattooArtistsPage = () => {
 
   if (loading) {
     return (
-      <Spinner animation="border" role="status">
-        <span className="visually-hidden">Loading...</span>
-      </Spinner>
+      <Container>
+        <Row>
+          <Col
+            className="d-flex align-items-center justify-content-center"
+            style={{ minHeight: "100vh" }}
+          >
+            <div>
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </div>
+          </Col>
+        </Row>
+      </Container>
     )
   }
 

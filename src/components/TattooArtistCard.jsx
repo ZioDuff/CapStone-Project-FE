@@ -5,17 +5,17 @@ import { Card } from "react-bootstrap"
 const TattooArtistCard = ({ tattooArtist }) => {
   return (
     <>
-      <Card className="bg-dark text-white ">
+      <Card
+        as={Link}
+        to={`/tatuatore/${tattooArtist?.id}`}
+        className="bg-dark text-white "
+      >
         <Card.Img
-          style={{
-            width: "100%",
-            aspectRatio: "4/3",
-            objectFit: "cover",
-          }}
+          className="artist-card"
           src={tattooArtist?.avatarURL}
           alt={tattooArtist?.username}
         />
-        <div className="card-overlay">
+        <div className="overlay-card">
           <div className="d-flex flex-column p-2">
             <Card.Title>{tattooArtist?.username}</Card.Title>
             <Link

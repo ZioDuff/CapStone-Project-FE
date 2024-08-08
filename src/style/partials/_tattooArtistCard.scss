@@ -1,19 +1,34 @@
+.card {
+  border-color: gold;
+}
+
+.artist-card {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  
+}
 
 
-.card-overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    display: flex;
-    justify-content: start;
-    align-items: end;
+.overlay-card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: end;
+  background-color: rgba(0, 0, 0, 0.532);
+}
+
+
+@media screen and (min-width: 900px) {
+  .overlay-card{
+    background-color: rgba(0, 0, 0, 0.532);
     opacity: 0;
     transition: opacity 0.3s ease;
   }
 
-  .card:hover .card-overlay {
+  .card:hover .overlay-card {
     opacity: 1;
-    
   }
+}
