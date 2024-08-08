@@ -11,6 +11,7 @@ const MyNavbar = () => {
   const token = useSelector((state) => state.user.user_bearer?.accessToken)
   const isLogged = useSelector((state) => state.user.isLogged)
   const loggedUser = useSelector((state) => state.user.user_info)
+  const isAdmin = useSelector((state) => state.user?.isAdmin)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -49,9 +50,15 @@ const MyNavbar = () => {
                 Crew
               </Nav.Link>
 
-              <Nav.Link as={Link} to="/prenota">
-                Prenota
-              </Nav.Link>
+              {isAdmin ? (
+                <Nav.Link as={Link} to="/prenota">
+                  Prenotazioni
+                </Nav.Link>
+              ) : (
+                <Nav.Link as={Link} to="/prenota">
+                  Prenota
+                </Nav.Link>
+              )}
               {!isLogged ? (
                 <Nav.Link as={Link} to="/login">
                   Login

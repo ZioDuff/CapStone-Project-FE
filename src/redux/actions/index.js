@@ -27,6 +27,7 @@ export const FETCH_ALL_TATTOO_SUCCESS = "FETCH_ALL_TATTOO_SUCCESS"
 export const ADD_RESERVATION = "ADD_RESERVATION"
 export const REMOVE_RESERVATION = "REMOVE_RESERVATION"
 export const SET_RESERVATIONS = "SET_RESERVATIONS"
+export const GET_RESERVATION = "GET_RESERVATION"
 
 export const SET_ERROR_LOGIN = "SET_ERROR_LOGIN"
 export const SET_ERROR_REGISTRATION = "SET_ERROR_REGISTRATION"
@@ -279,7 +280,21 @@ export const fetchTattoosAction = () => {
     }
   }
 }
-
+export const fetchGetReservationAction = (token, numOfPage) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(URL + `reservations?page=${numOfPage}`, {
+        headers: { Authorization: "Bearer " + token },
+      })
+      console.log(response)
+      dispatch({ type: GET_RESERVATION, payload: response.data })
+    } catch (err) {
+      console.log(err.response.data.message)
+    } finally {
+      dispatch({ type: STOP_LOADING })
+    }
+  }
+}
 export const fetchSaveReservationAction = (token, reservationObj) => {
   return async (dispatch) => {
     try {
@@ -295,6 +310,8 @@ export const fetchSaveReservationAction = (token, reservationObj) => {
       await dispatch(fetchUserInfoAction(token))
     } catch (err) {
       console.log(err.message)
+    } finally {
+      dispatch({ type: STOP_LOADING })
     }
   }
 }
@@ -317,6 +334,8 @@ export const fetchSaveTattooSessionReservationAction = (
       await dispatch(fetchUserInfoAction(token))
     } catch (err) {
       console.log(err.message)
+    } finally {
+      dispatch({ type: STOP_LOADING })
     }
   }
 }
@@ -337,6 +356,8 @@ export const fetchDeleteReservationAction = (token, reservationId) => {
       await dispatch(fetchUserInfoAction(token))
     } catch (err) {
       console.log(err.message)
+    } finally {
+      dispatch({ type: STOP_LOADING })
     }
   }
 }
