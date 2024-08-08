@@ -15,10 +15,27 @@
         background-color: #1b1a1a;
         width: 100%;
     }
+    .react-calendar__navigation__label {
+        pointer-events: none;
+        
+      }
 
     .react-calendar__navigation button:enabled:hover {
         background-color: rgb(54, 54, 53) ;
+        color: aliceblue;
         
+    }
+
+     .react-calendar__navigation button:enabled:focus {
+        background-color: #d7b237;
+        color: #1b1a1a;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px ;
+    }
+
+    .react-calendar__navigation__prev2-button,
+    .react-calendar__navigation__next2-button {
+        display: none;
     }
 
     abbr[title] {
@@ -28,9 +45,20 @@
         color: gold;
     }
     
+    .react-calendar__tile--active{
+        background-color:gold;
+        color: #1b1a1a;
+    }
+    .react-calendar__tile:enabled:focus{
+        background-color: gold;
+    }
 
+    .react-calendar__tile--active:enabled:focus{
+        background-color: gold;
+    }
     .react-calendar__tile--now {
-       border-color: gold;
+       background-color: #eed573;
+       
     }
 
 

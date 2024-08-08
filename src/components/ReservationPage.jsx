@@ -94,6 +94,16 @@ export const ReservationPage = () => {
     )
   }
 
+  const handlePreviousPage = () => {
+    if (numOfPage > 0) {
+      setNumOfPage(numOfPage - 1)
+    }
+  }
+
+  const handleNextPage = () => {
+    setNumOfPage(numOfPage + 1)
+  }
+
   useEffect(() => {
     if (isAdmin) {
       dispatch(fetchGetReservationAction(token, numOfPage))
@@ -165,7 +175,7 @@ export const ReservationPage = () => {
                 </>
               ) : (
                 <div>
-                  <Alert>
+                  <Alert className="text-center">
                     Sembra che al momento non ci siano prenotazioni!
                   </Alert>
                 </div>
@@ -174,11 +184,17 @@ export const ReservationPage = () => {
           </Col>
           <Col className="mb-4" xs={12}>
             <div className="d-flex justify-content-evenly align-items-center">
-              <span onClick={() => setNumOfPage(numOfPage - 1)}>
+              <span
+                onClick={handlePreviousPage}
+                style={{
+                  cursor: numOfPage === 0 ? "not-allowed" : "pointer",
+                  opacity: numOfPage === 0 ? 0.5 : 1,
+                }}
+              >
                 <FaArrowLeft />
               </span>
               <span>{numOfPage + 1} </span>
-              <span onClick={() => setNumOfPage(numOfPage + 1)}>
+              <span onClick={handleNextPage}>
                 <FaArrowRight />
               </span>
             </div>
