@@ -1,5 +1,6 @@
 import {
   FETCH_ALL_TATTOO_SUCCESS,
+  STOP_LOADING,
   UPLOAD_TATTOO_FAILURE,
   UPLOAD_TATTOO_REQUEST,
   UPLOAD_TATTOO_SUCCESS,
@@ -14,6 +15,11 @@ const initialState = {
 
 const tattooReducer = (state = initialState, action) => {
   switch (action.type) {
+    case STOP_LOADING:
+      return {
+        ...state,
+        isLoading: false,
+      }
     case UPLOAD_TATTOO_REQUEST:
       return {
         ...state,
@@ -35,6 +41,7 @@ const tattooReducer = (state = initialState, action) => {
         ...state,
         tattoos: action.payload,
       }
+
     default:
       return state
   }

@@ -21,11 +21,11 @@ const TattooCard = ({ tattoo }) => {
 
   return (
     <>
-      <Card as={Link} to={tattoo.tattoURL} target="_blank" border="primary">
+      <Card border="primary">
         <Card.Img
           className="tattoo-card"
-          src={tattoo.tattoURL}
-          alt={tattoo.name}
+          src={tattoo?.tattoURL}
+          alt={tattoo?.name}
         />
         <div className="card-overlay p-2">
           <Card.Title>{tattoo?.name}</Card.Title>

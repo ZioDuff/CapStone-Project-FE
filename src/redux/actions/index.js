@@ -31,6 +31,9 @@ export const GET_RESERVATION = "GET_RESERVATION"
 
 export const SET_ERROR_LOGIN = "SET_ERROR_LOGIN"
 export const SET_ERROR_REGISTRATION = "SET_ERROR_REGISTRATION"
+export const SET_ERROR_TATTOSESSION = "SET_ERROR_TATTOSESSION"
+export const SET_ERROR_CONSULTATION = "SET_ERROR_CONSULTATION"
+export const SET_ERROR_TATTOO = "SET_ERROR_TATTOO"
 export const CLEAR_ERROR = "CLEAR_ERROR"
 
 export const RUN_LOADING = "RUN_LOADING"
@@ -268,6 +271,7 @@ export const fetchUploadTattooAction = (token, formData) => {
 
 export const fetchTattoosAction = () => {
   return async (dispatch) => {
+    dispatch({ type: UPLOAD_TATTOO_REQUEST })
     try {
       const response = await axios.get(URL + "tattoos")
       dispatch({
@@ -276,7 +280,10 @@ export const fetchTattoosAction = () => {
       })
       console.log(response.data.content)
     } catch (err) {
-      console.log(err.message)
+      const errMsg = err.response.data.message
+      dispatch({ type: SET_ERROR_TATTOO, payload: errMsg })
+    } finally {
+      dispatch({ type: STOP_LOADING })
     }
   }
 }
@@ -297,6 +304,7 @@ export const fetchGetReservationAction = (token, numOfPage) => {
 }
 export const fetchSaveReservationAction = (token, reservationObj) => {
   return async (dispatch) => {
+    dispatch({ type: CLEAR_ERROR })
     try {
       const response = await axios.post(
         URL + "reservations/me",
@@ -309,7 +317,8 @@ export const fetchSaveReservationAction = (token, reservationObj) => {
       dispatch({ type: ADD_RESERVATION, payload: response.data })
       await dispatch(fetchUserInfoAction(token))
     } catch (err) {
-      console.log(err.message)
+      const errMsg = err.response.data.message
+      dispatch({ type: SET_ERROR_CONSULTATION, payload: errMsg })
     } finally {
       dispatch({ type: STOP_LOADING })
     }
@@ -321,6 +330,8 @@ export const fetchSaveTattooSessionReservationAction = (
   tattooSessionReservationObj
 ) => {
   return async (dispatch) => {
+    dispatch({ type: CLEAR_ERROR })
+
     try {
       const response = await axios.post(
         URL + "reservations/tattooSessionRequest/me",
@@ -331,9 +342,11 @@ export const fetchSaveTattooSessionReservationAction = (
       )
       console.log(response.data)
       dispatch({ type: ADD_RESERVATION, payload: response.data })
+
       await dispatch(fetchUserInfoAction(token))
     } catch (err) {
-      console.log(err.message)
+      const errMsg = err.response.data.message
+      dispatch({ type: SET_ERROR_TATTOSESSION, payload: errMsg })
     } finally {
       dispatch({ type: STOP_LOADING })
     }

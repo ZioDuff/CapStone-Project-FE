@@ -17,7 +17,7 @@ import {
 } from "react-bootstrap"
 import TattooCard from "./TattooCard"
 import { fetchDeleteTattooArtistAction } from "../redux/actions"
-import { FaFacebook, FaInstagram, FaRecycle, FaTrash } from "react-icons/fa"
+import { FaFacebook, FaInstagram, FaTrash } from "react-icons/fa"
 const SingleTattooArtistPage = () => {
   const singleTattooArtist = useSelector(
     (state) => state.tattooArtist.singleTattooArtist
@@ -33,9 +33,17 @@ const SingleTattooArtistPage = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  const [selectedTattoo, setSelectedTattoo] = useState(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const handleShowDeleteModal = () => setShowDeleteModal(true)
-  const handleCloseDeleteModal = () => setShowDeleteModal(false)
+  const handleShowDeleteModal = (tattoo) => {
+    setSelectedTattoo(tattoo)
+    setShowDeleteModal(true)
+  }
+
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false)
+    setSelectedTattoo(null)
+  }
 
   useEffect(() => {
     if (id) {
@@ -161,6 +169,12 @@ const SingleTattooArtistPage = () => {
                     </div>
                   )}
                   <div>
+                    <p>
+                      Contattami al:{" "}
+                      <span className="text-primary fw-bold">
+                        {singleTattooArtist?.phoneNumber}
+                      </span>
+                    </p>
                     <a href="#" className=" mx-3">
                       <FaInstagram className="icon-social-artist-page" />
                     </a>
@@ -196,7 +210,7 @@ const SingleTattooArtistPage = () => {
                               <span
                                 className="pe-2"
                                 style={{ cursor: "pointer" }}
-                                onClick={handleShowDeleteModal}
+                                onClick={() => handleShowDeleteModal(tattoo)}
                               >
                                 <FaTrash className="text-danger " />
                               </span>
@@ -216,14 +230,14 @@ const SingleTattooArtistPage = () => {
                                   <p className="text-light">
                                     nome:
                                     <span className="ms-1 fw-bold text-primary">
-                                      {singleTattooArtist?.surname}
+                                      {selectedTattoo?.name}
                                     </span>
                                   </p>
                                 </Modal.Body>
                                 <Modal.Footer>
                                   <Button
                                     onClick={() =>
-                                      handleDeleteTattoo(tattoo.id)
+                                      handleDeleteTattoo(selectedTattoo?.id)
                                     }
                                     variant="danger"
                                   >
