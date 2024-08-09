@@ -4,6 +4,7 @@ import {
   SET_ERROR_LOGIN,
   SET_ERROR_TATTOSESSION,
   SET_ERROR_CONSULTATION,
+  SET_ERROR_TATTOO,
 } from "../actions"
 
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
   errorRegistration: null,
   errorTattooSession: null,
   errorConsultation: null,
+  errorTattoo: null,
 }
 
 const errorReducer = (state = initialState, action) => {
@@ -35,6 +37,11 @@ const errorReducer = (state = initialState, action) => {
         ...state,
         errorConsultation: action.payload,
       }
+    case SET_ERROR_TATTOO:
+      return {
+        ...state,
+        errorTattoo: action.payload,
+      }
     case CLEAR_ERROR:
       return {
         ...state,
@@ -42,6 +49,7 @@ const errorReducer = (state = initialState, action) => {
         errorRegistration: null,
         errorTattooSession: null,
         errorConsultation: null,
+        errorTattoo: null,
       }
     default:
       return state
