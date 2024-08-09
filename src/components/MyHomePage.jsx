@@ -43,7 +43,9 @@ const MyHomePage = () => {
               {isLogged ? (
                 <div className="my-3">
                   <h3>Prendi subito appuntamento!</h3>
-                  <Button className="btn-submit">Prenota</Button>
+                  <Button as={Link} to="/prenota" className="btn-submit">
+                    Prenota
+                  </Button>
                 </div>
               ) : (
                 <div className="my-3">

@@ -66,6 +66,7 @@ const LoginPage = () => {
     setName("")
     setsurname("")
     setDateOfBirth("")
+    setIsLogged(true)
   }
 
   const resetFormFields = () => {

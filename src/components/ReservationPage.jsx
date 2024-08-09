@@ -11,6 +11,7 @@ import {
   Form,
   Modal,
   Row,
+  Spinner,
 } from "react-bootstrap"
 import Calendar from "react-calendar"
 import { useDispatch, useSelector } from "react-redux"
@@ -24,6 +25,7 @@ import {
 } from "../redux/actions"
 import moment from "moment"
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
+
 export const ReservationPage = () => {
   const loggedUser = useSelector((state) => state.user?.user_info)
   const userReservations = useSelector(
@@ -34,8 +36,17 @@ export const ReservationPage = () => {
   const tattooArtistsArray = useSelector(
     (state) => state.tattooArtist?.tattooArtists
   )
+  const reservationLoading = useSelector(
+    (state) => state.reservations?.isLoading
+  )
   const token = useSelector((state) => state.user.user_bearer?.accessToken)
   const isAdmin = useSelector((state) => state.user?.isAdmin)
+  const tattooSessionError = useSelector(
+    (state) => state.error?.errorTattooSession
+  )
+  const consultationError = useSelector(
+    (state) => state.error?.errorConsultation
+  )
   const dispatch = useDispatch()
 
   const [dateReservation, setDateReservation] = useState(new Date())
@@ -54,7 +65,9 @@ export const ReservationPage = () => {
 
   const handleDeleteReservation = (reservationId) => {
     if (token) {
-      dispatch(fetchDeleteReservationAction(token, reservationId))
+      dispatch(fetchDeleteReservationAction(token, reservationId)).then(() => {
+        handleClose()
+      })
     }
   }
 
@@ -194,7 +207,7 @@ export const ReservationPage = () => {
         <Row>
           <Col>
             {loggedUser?.role === "USER" && (
-              <>
+              <div className="my-4">
                 <h1>Prenota ora la tua consultazione!</h1>
                 <p className="text-light">
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -202,12 +215,12 @@ export const ReservationPage = () => {
                   eveniet corporis repellat odit sed assumenda blanditiis velit,
                   dolores odio in iste? Tenetur, voluptatem!
                 </p>
-              </>
+              </div>
             )}
             {loggedUser?.role === "TATTOOARTIST" && (
-              <>
+              <div className="my-4">
                 <h1>Consulta le tue prenotazioni!</h1>
-              </>
+              </div>
             )}
             {!isLogged ? (
               <div
@@ -249,12 +262,17 @@ export const ReservationPage = () => {
                           className="d-flex flex-column mx-auto "
                         >
                           <p className="mt-2 text-light">
-                            Data selezionata: {dateReservation.toDateString()}
+                            Data selezionata:{" "}
+                            <span className="text-primary fw-bold">
+                              {dateReservation.toDateString()}
+                            </span>
                           </p>
 
-                          <Form.Label>
+                          <Form.Label className="text-light">
                             Ora:
                             <Form.Control
+                              className="mb-2"
+                              style={{ cursor: "pointer" }}
                               required
                               type="time"
                               value={timeReservation}
@@ -263,11 +281,11 @@ export const ReservationPage = () => {
                               }
                             />
                           </Form.Label>
-                          <Form.Label className="">
+                          <Form.Label className="text-light">
                             Tatuatore
                             <Form.Select
                               required
-                              className="mb-3"
+                              className="mb-2"
                               onChange={(e) =>
                                 setTattooArtistusername(e.target.value)
                               }
@@ -286,9 +304,22 @@ export const ReservationPage = () => {
                               )}
                             </Form.Select>
                           </Form.Label>
-                          <Button className="btn-primary" type="submit">
-                            Prenota
-                          </Button>
+                          {consultationError && (
+                            <Alert variant="danger">{consultationError}</Alert>
+                          )}
+                          {reservationLoading ? (
+                            <div className="my-4">
+                              <Spinner animation="border" role="status">
+                                <span className="visually-hidden">
+                                  Loading...
+                                </span>
+                              </Spinner>
+                            </div>
+                          ) : (
+                            <Button className="btn-primary my-4" type="submit">
+                              Prenota
+                            </Button>
+                          )}
                         </Col>
                       </Form>
                     )}
@@ -297,9 +328,12 @@ export const ReservationPage = () => {
                         className="reservation-form"
                         onSubmit={handleTattooSessionSubmit}
                       >
-                        <Alert variant="warning">
-                          Bentornato {loggedUser?.username} , è il momento di
-                          una nuova prenotazione
+                        <Alert className="text-light" variant="warning">
+                          Bentornato{" "}
+                          <span className="fw-bold text-uppercase text-primary">
+                            {loggedUser?.username}
+                          </span>
+                          , è il momento di una nuova prenotazione
                         </Alert>
                         <Col>
                           <Calendar
@@ -307,14 +341,25 @@ export const ReservationPage = () => {
                             value={dateReservation}
                           />
                         </Col>
-                        <Col className="d-flex flex-column ">
+                        <Col
+                          xs={12}
+                          md={10}
+                          lg={8}
+                          xl={6}
+                          className="d-flex flex-column mx-auto "
+                        >
                           <p className="mt-2 text-light">
-                            Data selezionata: {dateReservation.toDateString()}
+                            Data selezionata:{" "}
+                            <span className="text-primary fw-bold">
+                              {dateReservation.toDateString()}
+                            </span>
                           </p>
 
-                          <Form.Label>
+                          <Form.Label className="text-light">
                             Ora:
                             <Form.Control
+                              className="mb-2"
+                              style={{ cursor: "pointer" }}
                               required
                               type="time"
                               value={timeReservation}
@@ -323,30 +368,48 @@ export const ReservationPage = () => {
                               }
                             />
                           </Form.Label>
-                          <Form.Label className="">
+                          <Form.Label className="text-light">
                             Utente
                             <Form.Control
+                              className="mb-2"
                               required
                               type="text"
                               placeholder="username utente.."
                               onChange={(e) => setUsername(e.target.value)}
                             />
                           </Form.Label>
-                          <Button className="btn-primary" type="submit">
-                            Prenota
-                          </Button>
+                          {tattooSessionError && (
+                            <Alert variant="danger">{tattooSessionError}</Alert>
+                          )}
+                          {reservationLoading ? (
+                            <div className="my-4">
+                              <Spinner animation="border" role="status">
+                                <span className="visually-hidden">
+                                  Loading...
+                                </span>
+                              </Spinner>
+                            </div>
+                          ) : (
+                            <Button className="btn-primary my-4" type="submit">
+                              Prenota
+                            </Button>
+                          )}
                         </Col>
                       </Form>
                     )}
                   </Row>
                 </Container>
-                <Container className="border-top mt-5">
+                <Container className="border-top ">
                   <Row>
                     {userReservations?.length > 0 ? (
                       <>
                         <h4 className="text-light my-4">Le tue prenotazioni</h4>
                         {userReservations.map((reservation, i) => (
-                          <Col key={i}>
+                          <Col
+                            xs={12}
+                            md={userReservations?.length > 1 ? 6 : 12}
+                            key={i}
+                          >
                             <Card className="mb-4">
                               <Card.Header>
                                 Tipo di Prenotazione:{" "}
@@ -409,21 +472,33 @@ export const ReservationPage = () => {
                                             Elimina Prenotazione
                                           </Modal.Title>
                                         </Modal.Header>
-                                        <Modal.Body>
-                                          Sicuro di voler eliminare la
-                                          prenotazione:
-                                          <span className="d-block">
-                                            Di tipo:{" "}
-                                            {reservation?.typeReservation},
-                                          </span>
-                                          <span>
-                                            Con:{" "}
-                                            {reservation.tattoArtist?.username},
-                                          </span>
-                                          <span className="d-block">
-                                            in data:{" "}
-                                            {reservation?.dateReservation}.
-                                          </span>
+                                        <Modal.Body className="text-light">
+                                          <h4>
+                                            Sicuro di voler eliminare la
+                                            prenotazione:
+                                          </h4>
+                                          <p className="mb-1">
+                                            Di tipo:
+                                            <span className="ms-1 text-primary fw-bold">
+                                              {reservation?.typeReservation},
+                                            </span>
+                                          </p>
+                                          <p className="mb-1">
+                                            Con:
+                                            <span className="ms-1 text-primary fw-bold">
+                                              {
+                                                reservation.tattoArtist
+                                                  ?.username
+                                              }
+                                              ,
+                                            </span>
+                                          </p>
+                                          <p className="mb-1">
+                                            in data:
+                                            <span className="ms-1 text-primary fw-bold">
+                                              {reservation?.dateReservation}.
+                                            </span>
+                                          </p>
                                         </Modal.Body>
                                         <Modal.Footer>
                                           <Button
@@ -461,20 +536,29 @@ export const ReservationPage = () => {
                                             Elimina Prenotazione
                                           </Modal.Title>
                                         </Modal.Header>
-                                        <Modal.Body>
-                                          Sicuro di voler eliminare la
-                                          prenotazione:
-                                          <span className="d-block">
-                                            Di tipo:{" "}
-                                            {reservation?.typeReservation},
-                                          </span>
-                                          <span>
-                                            Con: {reservation.user?.username},
-                                          </span>
-                                          <span className="d-block">
-                                            in data:{" "}
-                                            {reservation?.dateReservation}.
-                                          </span>
+                                        <Modal.Body className="text-light">
+                                          <h4>
+                                            Sicuro di voler eliminare la
+                                            prenotazione:
+                                          </h4>
+                                          <p className="mb-1">
+                                            Di tipo:
+                                            <span className="ms-1 text-primary fw-bold">
+                                              {reservation?.typeReservation},
+                                            </span>
+                                          </p>
+                                          <p className="mb-1">
+                                            Con:
+                                            <span className="ms-1 text-primary fw-bold">
+                                              {reservation.user?.username},
+                                            </span>
+                                          </p>
+                                          <p className="mb-1">
+                                            in data:
+                                            <span className="ms-1 text-primary fw-bold">
+                                              {reservation?.dateReservation}.
+                                            </span>
+                                          </p>
                                         </Modal.Body>
                                         <Modal.Footer>
                                           <Button
@@ -497,8 +581,10 @@ export const ReservationPage = () => {
                         ))}
                       </>
                     ) : (
-                      <div>
-                        <p>Non hai prenotazioni</p>
+                      <div className="mt-4">
+                        <Alert variant="warning">
+                          Al momento non hai nessuna prenotazione
+                        </Alert>
                       </div>
                     )}
                   </Row>
