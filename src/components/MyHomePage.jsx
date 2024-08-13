@@ -22,42 +22,50 @@ const MyHomePage = () => {
       <Container data-bs-theme="dark">
         <Row>
           <Col xs={12} className="text-center ">
-            <h1 id="studio-headers" className="my-3">
-              Greatest Tattoo Studio
+            <h1 id="studio-headers" className="my-3 fw-bold text-uppercase">
+              Tattoo Studio
             </h1>
-            <section>
-              <div>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Temporibus, facere? A minima, nam illo accusamus doloremque
-                  aliquid neque quo nostrum quaerat molestiae, impedit
-                  accusantium deleniti? Atque enim excepturi quas minus!
-                </p>
-              </div>
-              <div>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Id
-                  doloribus temporibus commodi laboriosam maiores molestias
-                  nobis non officia repudiandae veniam. Quisquam labore quidem
-                  illum dolore totam molestiae ipsum reiciendis culpa.
-                </p>
-              </div>
-              {isLogged ? (
-                <div className="my-3">
-                  <h3>Prendi subito appuntamento!</h3>
-                  <Button as={Link} to="/prenota" className="btn-submit">
-                    Prenota
-                  </Button>
-                </div>
-              ) : (
-                <div className="my-3">
-                  <h3>Se vuoi prendere appuntamento prima accedi!</h3>
-                  <Button className="btn-submit" as={Link} to="/login">
-                    Login
-                  </Button>
-                </div>
-              )}
-            </section>
+            <Container as="section" className="border-bottom border-1 pb-3">
+              <Row>
+                <Col xs={12}>
+                  <p className="ms-auto me-auto w-50">
+                    <span className="fw-bold text-primary me-1">
+                      Tattoo Studio
+                    </span>
+                    nasce a <span className="fw-bold text-primary">Roma</span>{" "}
+                    grazie ad un gruppo di professionisti uniti dallo scopo
+                    comune di diffondere la propria arte e la propria passione.
+                  </p>
+                </Col>
+                <Col xs={12}>
+                  <p className="ms-auto me-auto w-50">
+                    Benvenuti nel nostro studio di tatuaggi, dove l’arte prende
+                    vita sulla pelle. Il nostro team si dedica a trasformare le
+                    vostre idee e visioni in opere d’arte uniche e
+                    personalizzate. Che si tratti del vostro primo tatuaggio o
+                    di aggiungere un nuovo pezzo alla vostra collezione, siamo
+                    qui per offrirvi un’esperienza sicura, professionale e
+                    creativa. Esplorate il portfolio dei nostri artisti e
+                    lasciatevi ispirare.
+                  </p>
+                </Col>
+                {isLogged ? (
+                  <div className="my-3">
+                    <h3>Prendi subito appuntamento!</h3>
+                    <Button as={Link} to="/prenota" className="btn-submit">
+                      Prenota
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="my-3">
+                    <h3>Se vuoi prendere appuntamento prima accedi!</h3>
+                    <Button className="btn-submit" as={Link} to="/login">
+                      Login
+                    </Button>
+                  </div>
+                )}
+              </Row>
+            </Container>
           </Col>
           <Container className="text-light my-3">
             {loadingTattoos ? (
@@ -78,8 +86,7 @@ const MyHomePage = () => {
                 {tattoos?.length > 0 ? (
                   <>
                     <h2 className="mb-4 text-center">
-                      Questi sono solo alcuni dei lavori fatti dai nostri
-                      Artisti
+                      Alcuni lavori dei nostri artisti!
                     </h2>
                     <Row className="justify-content-center">
                       {tattoos.map((tattoo, i) => (

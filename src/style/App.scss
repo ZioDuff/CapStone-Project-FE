@@ -7,17 +7,30 @@
 
 
 body {
-    background-color: $body-bg;
-    
-    font-family: $font-family-sans-serif;
+    background-color: $body-bg;    
+    font-family: "Roboto", sans-serif;
   }
 
-  h1,h2,h3,h4 {
+  h1,h2,h3,h4,h6 {
     font-family: "Montserrat", sans-serif;
     color: $primary !important;
 }
 a {
    color: $primary;
+}
+
+
+
+p {
+  color: aliceblue;
+  font-family: "Roboto", sans-serif;
+}
+
+li{
+  color: aliceblue;
+}
+li::marker{
+  color: #d7b237;
 }
 
 .carousel {

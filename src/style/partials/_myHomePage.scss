@@ -1,7 +1,29 @@
 @import "./variables";
 
+#studio-headers {
+  font-size: 50px;
+  
+  background: linear-gradient(
+    90deg,
+    rgba(71, 71, 19, 1) 0%,
+    rgba(254, 231, 12, 1) 44%,
+    rgba(215, 178, 55, 1) 100%
+  );
+  background-size: 300%;
+  -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradient-animation 3s infinite;
+}
 
+@keyframes gradient-animation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+}
 
-// section {
-//     color: white;
-// }
