@@ -40,7 +40,12 @@ const TattooArtistsPage = () => {
         Conosci la nostra crew!
       </h1>
       <div className="text-light text-center mb-4">
-        <p>
+        <p
+          style={{
+            maxWidth: "500px",
+          }}
+          className="ms-auto me-auto "
+        >
           siamo orgogliosi di collaborare con un team di artisti eccezionali,
           ognuno con uno stile unico e una passione ineguagliabile per l’arte
           del tatuaggio. La nostra esperienza a tua disposizione per guidarti al
