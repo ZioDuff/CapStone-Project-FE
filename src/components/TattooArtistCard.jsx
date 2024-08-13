@@ -17,7 +17,9 @@ const TattooArtistCard = ({ tattooArtist }) => {
         />
         <div className="overlay-card">
           <div className="d-flex flex-column p-2">
-            <Card.Title>{tattooArtist?.username}</Card.Title>
+            <Card.Title className="text-uppercase">
+              {tattooArtist?.username}
+            </Card.Title>
             <Link
               to={`/tatuatore/${tattooArtist?.id}`}
               className="text-decoration-undeline"

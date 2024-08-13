@@ -28,7 +28,12 @@ const MyHomePage = () => {
             <Container as="section" className="border-bottom border-1 pb-3">
               <Row>
                 <Col xs={12}>
-                  <p className="ms-auto me-auto w-50">
+                  <p
+                    style={{
+                      maxWidth: "500px",
+                    }}
+                    className="ms-auto me-auto "
+                  >
                     <span className="fw-bold text-primary me-1">
                       Tattoo Studio
                     </span>
@@ -38,7 +43,12 @@ const MyHomePage = () => {
                   </p>
                 </Col>
                 <Col xs={12}>
-                  <p className="ms-auto me-auto w-50">
+                  <p
+                    style={{
+                      maxWidth: "500px",
+                    }}
+                    className="ms-auto me-auto "
+                  >
                     Benvenuti nel nostro studio di tatuaggi, dove l’arte prende
                     vita sulla pelle. Il nostro team si dedica a trasformare le
                     vostre idee e visioni in opere d’arte uniche e

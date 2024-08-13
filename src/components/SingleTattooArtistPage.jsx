@@ -114,7 +114,9 @@ const SingleTattooArtistPage = () => {
                       alt={singleTattooArtist?.username}
                     />
                     <div className="artist-info">
-                      <h1>{singleTattooArtist?.username}</h1>
+                      <h1 className="fw-bold">
+                        {singleTattooArtist?.username}
+                      </h1>
                     </div>
                   </div>
                 </div>
@@ -168,12 +170,13 @@ const SingleTattooArtistPage = () => {
                       </Modal>
                     </div>
                   )}
-                  <div>
+                  <div className="text-center">
+                    <h4>Contatti</h4>
                     <p>
-                      Contattami al:{" "}
-                      <span className="text-primary fw-bold">
-                        {singleTattooArtist?.phoneNumber}
-                      </span>
+                      📞 <span>{singleTattooArtist?.phoneNumber}</span>
+                    </p>
+                    <p>
+                      📧 <span>{singleTattooArtist?.email}</span>
                     </p>
                     <a href="#" className=" mx-3">
                       <FaInstagram className="icon-social-artist-page" />
@@ -192,7 +195,7 @@ const SingleTattooArtistPage = () => {
                 {tattoos?.length > 0 ? (
                   <Container className="mt-3">
                     <h2 className="mb-3 fs-1 text-primary text-center">
-                      Questi sono alucni dei miei lavori!
+                      Questi sono alcuni dei miei lavori!
                     </h2>
                     <Row className="justify-content-center">
                       {tattoos.map((tattoo, i) => (

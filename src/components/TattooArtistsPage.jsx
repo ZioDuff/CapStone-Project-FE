@@ -36,13 +36,15 @@ const TattooArtistsPage = () => {
 
   return (
     <Container fluid>
-      <h1 className="text-center mt-4 mb-4">Conosci la nostra crew!</h1>
+      <h1 className="text-center text-uppercase fw-bold mt-4 mb-4">
+        Conosci la nostra crew!
+      </h1>
       <div className="text-light text-center mb-4">
         <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis
-          accusamus ullam libero doloremque, unde ex animi corrupti cupiditate.
-          Voluptas maiores alias numquam itaque dolor tempore quod dolorem,
-          totam obcaecati molestiae?
+          siamo orgogliosi di collaborare con un team di artisti eccezionali,
+          ognuno con uno stile unico e una passione ineguagliabile per l’arte
+          del tatuaggio. La nostra esperienza a tua disposizione per guidarti al
+          meglio nella tua scelta.
         </p>
       </div>
       <Row className="justify-content-center">
