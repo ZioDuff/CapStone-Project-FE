@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchTattooArtistsAction } from "../redux/actions"
-import { Col, Container, Row, Spinner } from "react-bootstrap"
+import { Alert, Col, Container, Row, Spinner } from "react-bootstrap"
 import TattooArtistCard from "./TattooArtistCard"
 
 const TattooArtistsPage = () => {
@@ -63,7 +63,11 @@ const TattooArtistsPage = () => {
             </Col>
           ))
         ) : (
-          <h1>Sembra che al momento non ci siano tatuatori</h1>
+          <Col className="mb-3 text-center" xs={8}>
+            <Alert variant="danger">
+              Stiamo assumendo la miglior crew! Presto sarà disponibile!
+            </Alert>
+          </Col>
         )}
       </Row>
     </Container>
